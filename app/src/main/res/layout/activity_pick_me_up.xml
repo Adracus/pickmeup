@@ -14,21 +14,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginTop="0dp" />
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="fill_parent"
-        android:elevation="1dp"
-        android:background="#ffe5e5e5"
-        android:layout_below="@+id/map"
-        android:layout_alignParentLeft="true"
-        android:layout_marginLeft="0dp"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="682dp">
-
-    </LinearLayout>
-
-    <com.getbase.floatingactionbutton.FloatingActionButton
+    <com.getbase.floatingactionbutton.AddFloatingActionButton
         android:id="@+id/pickup_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -37,29 +23,43 @@
         android:layout_alignParentRight="true"
         android:layout_alignBottom="@+id/map"
         android:layout_marginBottom="-40dp"
-        android:text="+"
         android:layout_marginRight="20dp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/title_activity_pick_me_up"
-        android:id="@+id/textView2"
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
         android:layout_below="@+id/map"
-        android:layout_alignParentStart="true"
-        android:layout_margin="10dp"
-        android:textSize="32dp"
-        android:textStyle="bold" />
+        android:id="@+id/scrollView" >
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Create a new Pickup request for friends nearby"
-        android:id="@+id/textView3"
-        android:layout_below="@+id/textView2"
-        android:layout_alignStart="@+id/textView2"
-        android:layout_alignParentBottom="true"
-        android:layout_alignEnd="@+id/pickup_button"
-        android:textSize="24dp" />
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="@string/title_activity_pick_me_up"
+                android:id="@+id/textView2"
+                android:layout_below="@+id/map"
+                android:layout_alignParentStart="true"
+                android:layout_margin="10dp"
+                android:textSize="32dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Create a new Pickup request for friends nearby"
+                android:id="@+id/textView3"
+                android:layout_below="@+id/textView2"
+                android:layout_alignStart="@+id/textView2"
+                android:layout_alignParentBottom="true"
+                android:layout_alignEnd="@+id/pickup_button"
+                android:textSize="24dp"
+                android:layout_margin="10dp" />
+        </LinearLayout>
+    </ScrollView>
+
 </RelativeLayout>
