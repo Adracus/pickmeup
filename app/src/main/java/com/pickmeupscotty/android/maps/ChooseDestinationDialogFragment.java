@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -32,9 +33,12 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class ChooseDestinationDialogFragment extends DialogFragment {
     ChooseDestinationDialogListener mListener;
+    AutoCompleteTextView textView;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -51,17 +55,27 @@ public class ChooseDestinationDialogFragment extends DialogFragment {
                 .setPositiveButton("Pick me up!", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        // sign in the user ...
+                        String query = textView.getText().toString();
+                        AsyncTask<String, Void, List<GooglePlaces.Place>> task = GooglePlaces.placesForAsync(query);
+                        try {
+                            List<GooglePlaces.Place> places = task.get();
+                            mListener.onDialogPositiveClick(places);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        } catch (ExecutionException e) {
+                            e.printStackTrace();
+                        }
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         ChooseDestinationDialogFragment.this.getDialog().cancel();
+                        ChooseDestinationDialogFragment.this.mListener.onDialogNegativeClick(ChooseDestinationDialogFragment.this);
                     }
                 });
         Dialog dialog = builder.create();
 
-        AutoCompleteTextView textView = (AutoCompleteTextView) view.findViewById(R.id.autocomplete);
+        textView = (AutoCompleteTextView) view.findViewById(R.id.autocomplete);
         textView.setAdapter(new AutoCompleteAdapter(getActivity(), R.layout.list_item));
         return dialog;
     }
@@ -82,7 +96,7 @@ public class ChooseDestinationDialogFragment extends DialogFragment {
     }
 
     public interface ChooseDestinationDialogListener {
-        public void onDialogPositiveClick(DialogFragment fragment);
+        public void onDialogPositiveClick(List<GooglePlaces.Place> places);
         public void onDialogNegativeClick(DialogFragment fragment);
     }
 }

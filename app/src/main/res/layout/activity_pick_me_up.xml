@@ -14,10 +14,11 @@
         android:layout_alignParentTop="true"
         android:layout_marginTop="0dp" />
 
-    <com.getbase.floatingactionbutton.AddFloatingActionButton
+    <com.getbase.floatingactionbutton.FloatingActionButton
         android:id="@+id/pickup_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        fab:fab_icon="@drawable/search_glass"
         fab:fab_colorNormal="@color/lightblue"
         fab:fab_colorPressed="@color/lightblue_pressed"
         android:layout_alignParentRight="true"

@@ -37,7 +37,8 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
             android:name=".activities.PickMeUp"
-            android:label="@string/title_activity_pick_me_up" >
+            android:label="@string/title_activity_pick_me_up"
+            android:exported="true" >
         </activity>
 
         <meta-data
@@ -50,15 +51,6 @@
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyB60m-FABb-Ni3TmUvji4iBq_96nck8VW0" />
 
-        <activity
-            android:name=".login.LoginActivity"
-            android:label="@string/title_activity_login" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
         <activity
             android:name=".activities.DriverActivity"
             android:label="@string/title_activity_driver"

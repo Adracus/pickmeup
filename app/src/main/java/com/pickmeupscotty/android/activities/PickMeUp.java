@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.AddFloatingActionButton;
+import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -17,13 +18,17 @@ import com.pickmeupscotty.android.R;
 import com.pickmeupscotty.android.amqp.RabbitService;
 import com.pickmeupscotty.android.amqp.Subscriber;
 import com.pickmeupscotty.android.maps.ChooseDestinationDialogFragment;
+import com.pickmeupscotty.android.maps.ChoosePlaceDialogFragment;
+import com.pickmeupscotty.android.maps.GooglePlaces;
 import com.pickmeupscotty.android.maps.LocationAware;
 import com.pickmeupscotty.android.messages.PickUpResponse;
 
-public class PickMeUp extends LocationAware implements ChooseDestinationDialogFragment.ChooseDestinationDialogListener {
+import java.util.List;
+
+public class PickMeUp extends LocationAware implements ChooseDestinationDialogFragment.ChooseDestinationDialogListener, ChoosePlaceDialogFragment.ChoosePlaceListener {
     private MapFragment mMapFragment;
     private GoogleMap mMap;
-    private AddFloatingActionButton fab;
+    private FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +38,7 @@ public class PickMeUp extends LocationAware implements ChooseDestinationDialogFr
         mMap = mMapFragment.getMap();
         mMap.setMyLocationEnabled(true);
 
-        fab = (AddFloatingActionButton) findViewById(R.id.pickup_button);
+        fab = (FloatingActionButton) findViewById(R.id.pickup_button);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,12 +83,42 @@ public class PickMeUp extends LocationAware implements ChooseDestinationDialogFr
     }
 
     @Override
-    public void onDialogPositiveClick(DialogFragment fragment) {
-
+    public void onDialogPositiveClick(List<GooglePlaces.Place> places) {
+        if (places.isEmpty()) {
+            Toast
+                    .makeText(this, "Could not find any matching location", Toast.LENGTH_LONG)
+                    .show();
+            return;
+        }
+        if (1 == places.size()) {
+            placeChosen(places.get(0));
+            return;
+        }
+        ChoosePlaceDialogFragment placeChooser = new ChoosePlaceDialogFragment();
+        placeChooser.setPlaces(places);
+        placeChooser.show(getFragmentManager(), "place_choose");
     }
 
     @Override
     public void onDialogNegativeClick(DialogFragment fragment) {
+        onCancelPickupRequest();
+    }
 
+    private void onCancelPickupRequest() {
+        Toast
+                .makeText(this, "Canceled pick up request", Toast.LENGTH_LONG)
+                .show();
+    }
+
+    @Override
+    public void placeChosen(GooglePlaces.Place place) {
+        Toast
+                .makeText(this, place.getName(), Toast.LENGTH_LONG)
+                .show();
+    }
+
+    @Override
+    public void canceled() {
+        onCancelPickupRequest();
     }
 }
