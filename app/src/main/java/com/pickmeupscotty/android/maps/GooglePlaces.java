@@ -1,5 +1,6 @@
 package com.pickmeupscotty.android.maps;
 
+import android.location.Location;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -22,7 +23,7 @@ public class GooglePlaces {
     private static final String PLACES_API_BASE = "https://maps.googleapis.com/maps/api/place";
     private static final String TYPE_AUTOCOMPLETE = "/autocomplete";
     private static final String OUT_JSON = "/json";
-    private static final String apiKey = "AIzaSyB60m-FABb-Ni3TmUvji4iBq_96nck8VW0";
+    private static final String browserKey = "AIzaSyDQC2EsFulKdRM01JsdD5o_oOo5xrm4BBQ";
 
     public static ArrayList<String> autocompleteResults(String input) {
         ArrayList<String> resultList = null;
@@ -31,9 +32,8 @@ public class GooglePlaces {
         StringBuilder jsonResults = new StringBuilder();
         try {
             StringBuilder sb = new StringBuilder(PLACES_API_BASE + TYPE_AUTOCOMPLETE + OUT_JSON);
-            sb.append("?key=" + apiKey);
-            sb.append("&components;=country:uk");
-            sb.append("&input;=" + URLEncoder.encode(input, "utf8"));
+            sb.append("?key=" + browserKey);
+            sb.append("&input=" + URLEncoder.encode(input, "utf8"));
 
             URL url = new URL(sb.toString());
             conn = (HttpURLConnection) url.openConnection();
