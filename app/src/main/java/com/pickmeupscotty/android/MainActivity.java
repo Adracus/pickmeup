@@ -3,7 +3,6 @@ package com.pickmeupscotty.android;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,9 +13,8 @@ import android.widget.Toast;
 
 import com.pickmeupscotty.android.amqp.MessageConsumer;
 import com.pickmeupscotty.android.amqp.RabbitService;
-import com.pickmeupscotty.android.amqp.Request;
 import com.pickmeupscotty.android.amqp.Subscriber;
-
+import com.pickmeupscotty.android.messages.PickUpRequest;
 
 
 public class MainActivity extends Activity {
@@ -30,18 +28,6 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         RabbitService.create(getApplicationContext());
-
-
-        RabbitService.subscribe(PickUpRequest.class, new Subscriber<PickUpRequest>() {
-
-            @Override
-            public void on(PickUpRequest request) {
-                int duration = Toast.LENGTH_SHORT;
-
-                Toast toast = Toast.makeText(getApplicationContext(), request.name, duration);
-                toast.show();
-            }
-        });
 
 
     }
@@ -80,7 +66,7 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onResume() {
-        super.onPause();
+        super.onResume();
 //        mConsumer.connectToRabbitMQ();
     }
 
@@ -90,19 +76,4 @@ public class MainActivity extends Activity {
 //        mConsumer.dispose();
     }
 
-    public static class PickUpRequest implements Request{
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public String name = "test";
-
-        public PickUpRequest() {
-
-        }
-    }
 }

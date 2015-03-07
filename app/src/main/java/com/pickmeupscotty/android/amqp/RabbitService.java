@@ -4,24 +4,19 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.pickmeupscotty.android.MainActivity;
-
-import java.io.UnsupportedEncodingException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.WeakHashMap;
 
 public class RabbitService {
 
     private static RabbitService instance;
     private Context context;
     private Runner runner;
-    private Map<Class<?>, List<WeakReference<Subscriber<Request>>>> subscribers = new HashMap<>();
+    private Map<Class<?>, List<WeakReference<Subscriber<Message>>>> subscribers = new HashMap<>();
 
     private RabbitService(){
 
@@ -36,19 +31,19 @@ public class RabbitService {
         return instance;
     }
 
-    public static <T extends Request> void subscribe(Class<T> requestType, Subscriber<T> sub) {
+    public static <T extends Message> void subscribe(Class<T> requestType, Subscriber<T> sub) {
 
         getInstance().addSubscriber(requestType, sub);
 
     }
 
-    private <T extends Request> void addSubscriber(Class<T> requestType, Subscriber<T> sub) {
-        List<WeakReference<Subscriber<Request>>> list = subscribers.get(requestType);
+    private <T extends Message> void addSubscriber(Class<T> requestType, Subscriber<T> sub) {
+        List<WeakReference<Subscriber<Message>>> list = subscribers.get(requestType);
         if(list == null) {
-            subscribers.put(requestType, new ArrayList<WeakReference<Subscriber<Request>>>());
+            subscribers.put(requestType, new ArrayList<WeakReference<Subscriber<Message>>>());
             list = subscribers.get(requestType);
         }
-        list.add(new WeakReference<Subscriber<Request>>((Subscriber<Request>) sub));
+        list.add(new WeakReference<Subscriber<Message>>((Subscriber<Message>) sub));
     }
 
     private class Runner implements Runnable {
@@ -65,13 +60,13 @@ public class RabbitService {
 
     }
 
-    public void sendToSubscribers(final Request request) {
-        List<WeakReference<Subscriber<Request>>> list = subscribers.get(request.getClass());
+    public void sendToSubscribers(final Message message) {
+        List<WeakReference<Subscriber<Message>>> list = subscribers.get(message.getClass());
 
         if(list != null) {
-            for (WeakReference<Subscriber<Request>> sub : list) {
+            for (WeakReference<Subscriber<Message>> sub : list) {
                 if (sub.get() != null) {
-                    new Handler(Looper.getMainLooper()).post(new SubscribeRunner(sub.get(), request));
+                    new Handler(Looper.getMainLooper()).post(new SubscribeRunner(sub.get(), message));
                 }
             }
         }
@@ -79,17 +74,17 @@ public class RabbitService {
 
     private class SubscribeRunner implements Runnable {
 
-        private Subscriber<Request> sub;
-        private Request request;
+        private Subscriber<Message> sub;
+        private Message message;
 
-        public SubscribeRunner(Subscriber<Request> sub, Request request) {
+        public SubscribeRunner(Subscriber<Message> sub, Message message) {
             this.sub = sub;
-            this.request = request;
+            this.message = message;
         }
 
         @Override
         public void run() {
-            sub.on(request);
+            sub.on(message);
         }
     }
     public void connect() {
@@ -109,12 +104,12 @@ public class RabbitService {
         this.context = context;
     }
 
-    public static boolean send(Request pickUpRequest) {
-        return getInstance().sendRequest(pickUpRequest);
+    public static boolean send(Message pickUpMessage) {
+        return getInstance().sendRequest(pickUpMessage);
     }
 
-    private boolean sendRequest(Request pickUpRequest) {
-        mConsumer.send(pickUpRequest);
+    private boolean sendRequest(Message pickUpMessage) {
+        mConsumer.send(pickUpMessage);
         return false;
     }
 }
