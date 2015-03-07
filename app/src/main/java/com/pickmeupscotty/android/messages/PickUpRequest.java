@@ -5,6 +5,12 @@ import android.location.Location;
 import com.pickmeupscotty.android.amqp.Message;
 
 public class PickUpRequest implements Message {
+    public static String CURRENT_LATITUDE = "CURRENT_LATITUDE";
+    public static String CURRENT_LONGITUDE = "CURRENT_LONGITUDE";
+    public static String DESTINATION_LATITUDE = "DESTINATION_LATITUDE";
+    public static String DESTINATION_LONGITUDE = "DESTINATION_LONGITUDE";
+    public static String FACEBOOK_ID = "FACEBOOK_ID";
+
     private double latitude;
     private double longitude;
 

@@ -48,7 +48,6 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="&lt;Name>"
                     android:id="@+id/textView4"
                     android:textColor="@android:color/black"
                     android:textSize="32dp"
@@ -56,7 +55,7 @@
                     android:layout_marginTop="10dp" />
 
                 <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:id="@+id/map"
+                    android:id="@+id/detourmap"
                     android:layout_width="match_parent"
                     android:layout_height="400dp"
                     android:name="com.google.android.gms.maps.MapFragment"
@@ -74,7 +73,9 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         style="@android:style/Widget.Material.Button"
-                        android:text="Decline">
+                        android:text="Deny"
+                        android:onClick="denyPickUp"
+                        android:id="@+id/deny_button">
                     </Button>
                     <Button
                         android:layout_width="wrap_content"
