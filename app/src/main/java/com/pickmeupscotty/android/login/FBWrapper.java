@@ -35,7 +35,7 @@ public enum FBWrapper implements Session.StatusCallback {
     }
 
     public void addFacebookLoginClosedListener(FacebookLoginStateListener l) {
-        stateOpenListener.add(l);
+        stateCloseListener.add(l);
     }
 
     private void fireFacebookLoginStateListener(SessionState sessionState) {

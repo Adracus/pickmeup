@@ -25,9 +25,9 @@ import java.util.List;
  * Created by florian on 07.03.15.
  */
 public class LoginFragment extends Fragment {
-
     private UiLifecycleHelper uiHelper;
     private static final String TAG = LoginFragment.class.getName();
+    private LoginButton authButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -35,20 +35,6 @@ public class LoginFragment extends Fragment {
 
         uiHelper = new UiLifecycleHelper(getActivity(), FBWrapper.INSTANCE);
         uiHelper.onCreate(savedInstanceState);
-
-        FBWrapper.INSTANCE.addFacebookLoginOpenedListener(new FBWrapper.FacebookLoginStateListener() {
-            @Override
-            public void onStateChanged() {
-                FBWrapper.INSTANCE.getFBFriends(new Request.GraphUserListCallback() {
-                    @Override
-                    public void onCompleted(List<GraphUser> graphUsers, Response response) {
-                        for (GraphUser u : graphUsers) {
-                            Log.i(TAG, u.getId());
-                        }
-                    }
-                });
-            }
-        });
     }
 
     @Override
@@ -57,7 +43,7 @@ public class LoginFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
 
-        LoginButton authButton = (LoginButton) view.findViewById(R.id.authButton);
+        authButton = (LoginButton) view.findViewById(R.id.authButton);
         authButton.setFragment(this);
         authButton.setReadPermissions(Arrays.asList("public_profile", "user_friends"));
 
