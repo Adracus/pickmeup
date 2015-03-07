@@ -55,29 +55,37 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="10dp" />
 
-            </LinearLayout>
+                <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/map"
+                    android:layout_width="match_parent"
+                    android:layout_height="400dp"
+                    android:name="com.google.android.gms.maps.MapFragment"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="0dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginTop="0dp" />
 
-            <LinearLayout
-                android:layout_height="wrap_content"
-                android:layout_width="fill_parent"
-                android:layout_alignParentBottom="true">
-                <Button
-                    android:layout_width="wrap_content"
+                <LinearLayout
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    style="@android:style/Widget.Material.Button"
-                    android:text="Decline">
-                </Button>
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    style="@android:style/Widget.Material.Button"
-                    android:onClick="acceptPickUp"
-                    android:text="Accept">
-                </Button>
+                    android:layout_width="fill_parent"
+                    android:layout_alignParentBottom="true">
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        style="@android:style/Widget.Material.Button"
+                        android:text="Decline">
+                    </Button>
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:onClick="acceptPickUp"
+                        style="@android:style/Widget.Material.Button"
+                        android:text="Accept">
+                    </Button>
+                </LinearLayout>
             </LinearLayout>
-
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 </RelativeLayout>

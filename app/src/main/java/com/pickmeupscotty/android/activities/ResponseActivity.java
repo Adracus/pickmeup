@@ -19,10 +19,10 @@ public class ResponseActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_response);
-        facebookId = getIntent().getStringExtra("FACEBOOK_ID");
-
-        TextView nameView = (TextView) findViewById(R.id.textView4);
-        nameView.setText(facebookId);
+//        facebookId = getIntent().getStringExtra("FACEBOOK_ID");
+//
+//        TextView nameView = (TextView) findViewById(R.id.textView4);
+//        nameView.setText(facebookId);
     }
 
     public void acceptPickUp(View view) {
