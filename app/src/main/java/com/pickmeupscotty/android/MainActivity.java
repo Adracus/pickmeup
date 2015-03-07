@@ -8,38 +8,19 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.pickmeupscotty.android.activities.DriverActivity;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.pickmeupscotty.android.activities.PickMeUp;
-import com.pickmeupscotty.android.amqp.MessageConsumer;
 import com.pickmeupscotty.android.amqp.RabbitService;
-import com.pickmeupscotty.android.amqp.Subscriber;
-import com.pickmeupscotty.android.messages.PickUpRequest;
 
 
 public class MainActivity extends Activity {
-
-    private MessageConsumer mConsumer;
-    private TextView mOutput;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        RabbitService.create(getApplicationContext(), "myFacebookID");
-
-//        RabbitService.subscribe(PickUpRequest.class, new Subscriber<PickUpRequest>() {
-//
-//            @Override
-//            public void on(PickUpRequest request) {
-//                int duration = Toast.LENGTH_SHORT;
-//
-//                Toast toast = Toast.makeText(getApplicationContext(), request.name, duration);
-//                toast.show();
-//            }
-//        });
+        RabbitService.create("myFacebookID");
 
     }
 
@@ -79,13 +60,11 @@ public class MainActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-//        mConsumer.connectToRabbitMQ();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-//        mConsumer.dispose();
     }
 
 }

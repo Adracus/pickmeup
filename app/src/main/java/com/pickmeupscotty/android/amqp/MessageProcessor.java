@@ -10,14 +10,13 @@ import java.io.IOException;
 import java.util.HashMap;
 
 /**
- *Consumes messages from a RabbitMQ broker
- *
+ * Consumes messages from a RabbitMQ broker
  */
-public class MessageConsumer extends  IConnectToRabbitMQ{
+public class MessageProcessor extends IConnectToRabbitMQ {
 
     private static final String EXCHANGE = "pickmeup";
 
-    public MessageConsumer(String server) {
+    public MessageProcessor(String server) {
         super(server, EXCHANGE, "fanout");
     }
 
@@ -29,64 +28,42 @@ public class MessageConsumer extends  IConnectToRabbitMQ{
     private byte[] mLastMessage;
     private String mLastType;
 
-    public void send(final Message message) {
+
+    /**
+     * Create Exchange and then start consuming. A binding needs to be added before any messages will be delivered
+     */
+    public void connectToRabbitMQ(final String facebookID) {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                try {
-                    HashMap<String, Object> headers = new HashMap<>();
+                if (MessageProcessor.super.connectToRabbitMQ()) {
 
-                    headers.put("CLASS", message.getClass().getName());
+                    try {
+                        mQueue = mModel.queueDeclare().getQueue();
+                        MySubscription = new QueueingConsumer(mModel);
+                        mModel.basicConsume(mQueue, false, MySubscription);
+                        mModel.exchangeDeclare(facebookID, "fanout");
+                        mModel.queueBind(mQueue, facebookID, "");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    if (MyExchangeType == "fanout")
+                        AddBinding("");//fanout has default binding
 
-                    ObjectMapper mapper = new ObjectMapper();
-                    byte[] messageBodyBytes =  mapper.writeValueAsBytes(message);
-                    mModel.basicPublish(EXCHANGE, "", new AMQP.BasicProperties.Builder()
-                            .headers(headers)
-                            .build(), messageBodyBytes);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    Running = true;
+                    Consume();
+
                 }
-
             }
         }).start();
     }
 
     /**
-     * Create Exchange and then start consuming. A binding needs to be added before any messages will be delivered
-     */
-    public boolean connectToRabbitMQ(String mFaceBookID)
-    {
-        if(super.connectToRabbitMQ())
-        {
-
-            try {
-                mQueue = mModel.queueDeclare().getQueue();
-                MySubscription = new QueueingConsumer(mModel);
-                mModel.basicConsume(mQueue, false, MySubscription);
-//                mModel.exchangeDeclare(mFaceBookID, "fanout");
-//                mModel.queueBind(mQueue, mFaceBookID, "");
-            } catch (IOException e) {
-                e.printStackTrace();
-                return false;
-            }
-            if (MyExchangeType == "fanout")
-                AddBinding("");//fanout has default binding
-
-            Running = true;
-//            mConsumeHandler.post(mConsumeRunner);
-            Consume();
-
-            return true;
-        }
-        return false;
-    }
-
-    /**
      * Add a binding between this consumers Queue and the Exchange with routingKey
+     *
      * @param routingKey the binding key eg GOOG
      */
-    public void AddBinding(String routingKey)
-    {
+    public void AddBinding(String routingKey) {
         try {
             mModel.queueBind(mQueue, mExchange, routingKey);
         } catch (IOException e) {
@@ -97,10 +74,10 @@ public class MessageConsumer extends  IConnectToRabbitMQ{
 
     /**
      * Remove binding between this consumers Queue and the Exchange with routingKey
+     *
      * @param routingKey the binding key eg GOOG
      */
-    public void RemoveBinding(String routingKey)
-    {
+    public void RemoveBinding(String routingKey) {
         try {
             mModel.queueUnbind(mQueue, mExchange, routingKey);
         } catch (IOException e) {
@@ -109,14 +86,12 @@ public class MessageConsumer extends  IConnectToRabbitMQ{
         }
     }
 
-    private void Consume()
-    {
-        Thread thread = new Thread()
-        {
+    private void Consume() {
+        Thread thread = new Thread() {
 
             @Override
             public void run() {
-                while(Running){
+                while (Running) {
                     QueueingConsumer.Delivery delivery;
                     try {
                         delivery = MySubscription.nextDelivery();
@@ -126,7 +101,7 @@ public class MessageConsumer extends  IConnectToRabbitMQ{
                             Class<Message> clazz = (Class<Message>) Class.forName(mLastType);
                             ObjectMapper mapper = new ObjectMapper();
                             Message message = mapper.readValue(mLastMessage, clazz);
-                            RabbitService.getInstance().sendToSubscribers(message);
+                            RabbitService.getInstance().notifySubscribers(message);
                         } catch (ClassNotFoundException | ClassCastException e) {
                             e.printStackTrace();
                         } catch (JsonMappingException e) {
@@ -151,11 +126,15 @@ public class MessageConsumer extends  IConnectToRabbitMQ{
 
     }
 
-    public void dispose(){
+    public void dispose() {
         Running = false;
     }
 
-    public void send(final Message message, final String myFacebookID) {
+    public void send(final Message message) {
+        send(message, EXCHANGE);
+    }
+
+    public void send(final Message message, final String exchange) {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -165,8 +144,8 @@ public class MessageConsumer extends  IConnectToRabbitMQ{
                     headers.put("CLASS", message.getClass().getName());
 
                     ObjectMapper mapper = new ObjectMapper();
-                    byte[] messageBodyBytes =  mapper.writeValueAsBytes(message);
-                    mModel.basicPublish(myFacebookID, "", new AMQP.BasicProperties.Builder()
+                    byte[] messageBodyBytes = mapper.writeValueAsBytes(message);
+                    mModel.basicPublish(exchange, "", new AMQP.BasicProperties.Builder()
                             .headers(headers)
                             .build(), messageBodyBytes);
                 } catch (IOException e) {
