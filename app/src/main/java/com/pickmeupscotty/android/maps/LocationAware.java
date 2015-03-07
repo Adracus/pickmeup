@@ -27,6 +27,7 @@ public abstract class LocationAware extends Activity implements GoogleApiClient.
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
                 .build();
+        mGoogleApiClient.connect();
     }
 
     public float distanceTo(Location other) {
