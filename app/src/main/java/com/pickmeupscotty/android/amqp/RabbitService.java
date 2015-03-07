@@ -1,120 +1,102 @@
 package com.pickmeupscotty.android.amqp;
 
-import android.content.Context;
-import android.util.Log;
-import android.widget.Toast;
+import android.os.Handler;
+import android.os.Looper;
 
-import com.pickmeupscotty.android.MainActivity;
-
-import java.io.UnsupportedEncodingException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.WeakHashMap;
 
 public class RabbitService {
 
-    private static RabbitService instance;
-    private Context context;
-    private Runner runner;
-    private Map<Class<?>, List<WeakReference<Subscriber<Request>>>> subscribers = new HashMap<>();
 
-    private RabbitService(){
+    public static final String RABBIT_MQ_IP = "178.62.55.27";
 
-    }
 
-    private MessageConsumer mConsumer;
+
+
+    private static final RabbitService INSTANCE = new RabbitService();
 
     public static RabbitService getInstance() {
-        if(instance == null) {
-            instance = new RabbitService();
-        }
-        return instance;
+        return INSTANCE;
     }
 
-    public static <T extends Request> void subscribe(Class<T> requestType, Subscriber<T> sub) {
+    private RabbitService(){}
 
+    public static void create(String facebookID) {
+        getInstance().connect(facebookID);
+    }
+
+    public static <T extends Message> void subscribe(Class<T> requestType, Subscriber<T> sub) {
         getInstance().addSubscriber(requestType, sub);
-
     }
 
-    private <T extends Request> void addSubscriber(Class<T> requestType, Subscriber<T> sub) {
-        List<WeakReference<Subscriber<Request>>> list = subscribers.get(requestType);
+
+    public static void send(Message pickUpMessage) {
+        getInstance().sendRequest(pickUpMessage);
+    }
+
+    public static void send(Message message, String myFacebookID) {
+        getInstance().sendRequest(message, myFacebookID);
+    }
+
+    private MessageProcessor mConsumer;
+    private Map<Class<?>, List<WeakReference<Subscriber<Message>>>> subscribers = new HashMap<>();
+
+
+
+
+
+    private <T extends Message> void addSubscriber(Class<T> requestType, Subscriber<T> sub) {
+        List<WeakReference<Subscriber<Message>>> list = subscribers.get(requestType);
         if(list == null) {
-            subscribers.put(requestType, new ArrayList<WeakReference<Subscriber<Request>>>());
+            subscribers.put(requestType, new ArrayList<WeakReference<Subscriber<Message>>>());
             list = subscribers.get(requestType);
         }
-        list.add(new WeakReference<Subscriber<Request>>((Subscriber<Request>) sub));
+        list.add(new WeakReference<>((Subscriber<Message>) sub));
     }
 
-    private class Runner implements Runnable {
+    public void notifySubscribers(final Message message) {
+        List<WeakReference<Subscriber<Message>>> list = subscribers.get(message.getClass());
 
-        @Override
-        public void run() {
+        if(list != null) {
+            for (WeakReference<Subscriber<Message>> sub : list) {
+                if (sub.get() != null) {
+                    new Handler(Looper.getMainLooper()).post(new SubscribeRunner(sub.get()) {
 
-            Log.e("RabbitService", "onStartCommand()");
-            mConsumer = new MessageConsumer("178.62.55.27");
-
-            mConsumer.connectToRabbitMQ();
-
-            mConsumer.setOnReceiveMessageHandler(new MessageConsumer.OnReceiveMessageHandler() {
-
-                public void onReceiveMessage(Request request) {
-
-                    List<WeakReference<Subscriber<Request>>> list = subscribers.get(request.getClass());
-
-                    if(list != null) {
-                        for (WeakReference<Subscriber<Request>> sub : list) {
-                            if (sub.get() != null) {
-                                sub.get().on(request);
-
-                            }
+                        @Override
+                        public void run() {
+                            this.sub.on(message);
                         }
-                    }
-
+                    });
                 }
-            });
+            }
         }
-
-    }
-    public void connect() {
-        
-        runner = new Runner();
-        new Thread(runner).start();
-        // The service is starting, due to a call to startService()
     }
 
-    public static void create(Context context) {
-        getInstance().setContext(context);
-        getInstance().connect();
-    }
+    private abstract class SubscribeRunner implements Runnable {
 
+        private Subscriber<Message> sub;
 
-    public void setContext(Context context) {
-        this.context = context;
-    }
-
-    public static boolean send(Request pickUpRequest) {
-        return getInstance().sendRequest(pickUpRequest);
-    }
-
-    private boolean sendRequest(Request pickUpRequest) {
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        public SubscribeRunner(Subscriber<Message> sub) {
+            this.sub = sub;
         }
-        mConsumer.send(pickUpRequest);
+    }
+
+    public void connect(final String facebookID) {
+        mConsumer = new MessageProcessor(RABBIT_MQ_IP);
+        mConsumer.connectToRabbitMQ(facebookID);
+    }
+
+    private boolean sendRequest(Message pickUpMessage, String myFacebookID) {
+        mConsumer.send(pickUpMessage, myFacebookID);
+        return false;
+    }
+
+    private boolean sendRequest(Message pickUpMessage) {
+        mConsumer.send(pickUpMessage);
         return false;
     }
 }
-//mOutput =  (TextView) findViewById(R.id.rabbitmessage);
-//
-//        Intent intent = new Intent(this, RabbitService.class);
-//        startService(intent);
-
-
-//
-//            }
