@@ -1,31 +1,54 @@
 package com.pickmeupscotty.android.login;
 
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.util.Base64;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.pickmeupscotty.android.R;
 
+import java.security.MessageDigest;
+
 
 public class LoginActivity extends FragmentActivity {
+    private static final String TAG = LoginActivity.class.getName();
     private LoginFragment loginFragment;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
+        try {
+            PackageInfo info = getPackageManager().getPackageInfo(
+                    "com.pickmeupscotty.android",
+                    PackageManager.GET_SIGNATURES);
+            for (Signature signature : info.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                Log.i(TAG, "KeyHash:");
+                Log.i(TAG, Base64.encodeToString(md.digest(), Base64.DEFAULT));
+            }
+        } catch (Exception e) {
+            Log.i(TAG, "EXCEPTION:");
+            Log.i(TAG, e.toString());
+        }
+
         if (savedInstanceState == null) {
             // Add the fragment on initial activity setup
             loginFragment = new LoginFragment();
-            int commit = getSupportFragmentManager()
+            getSupportFragmentManager()
                     .beginTransaction()
-                    .add(R.id.fb_login_fragment, loginFragment)
+                    .add(android.R.id.content, loginFragment)
                     .commit();
         } else {
             // Or set the fragment from restored state info
-            loginFragment = (LoginFragment) getSupportFragmentManager().findFragmentById(R.id.fb_login_fragment);
+            loginFragment = (LoginFragment) getSupportFragmentManager().findFragmentById(android.R.id.content);
         }
     }
 
