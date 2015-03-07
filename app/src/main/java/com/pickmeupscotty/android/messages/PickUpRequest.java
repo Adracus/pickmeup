@@ -1,7 +1,5 @@
 package com.pickmeupscotty.android.messages;
 
-import android.location.Location;
-
 import com.pickmeupscotty.android.amqp.Message;
 
 public class PickUpRequest implements Message {
@@ -11,41 +9,59 @@ public class PickUpRequest implements Message {
     public static String DESTINATION_LONGITUDE = "DESTINATION_LONGITUDE";
     public static String FACEBOOK_ID = "FACEBOOK_ID";
 
-    private double latitude;
-    private double longitude;
+    private double currentLatitude;
+    private double currentLongitude;
+    private double destinationLatitude;
+    private double destinationLongitude;
+    private String facebookId;
 
-    public PickUpRequest() {
-
+    public PickUpRequest(double currentLatitude, double currentLongitude,
+                         double destinationLatitude, double destinationLongitude,
+                         String facebookId) {
+        this.currentLatitude = currentLatitude;
+        this.currentLongitude = currentLongitude;
+        this.destinationLatitude = destinationLatitude;
+        this.destinationLongitude = destinationLongitude;
+        this.facebookId = facebookId;
     }
 
-    public PickUpRequest(double latitude, double longitude) {
-        this.latitude = latitude;
-        this.longitude = longitude;
+    public double getCurrentLatitude() {
+        return currentLatitude;
     }
 
-    public PickUpRequest(Location location) {
-        this.latitude = location.getLatitude();
-        this.longitude = location.getLongitude();
+    public void setCurrentLatitude(double currentLatitude) {
+        this.currentLatitude = currentLatitude;
     }
 
-    public double getLatitude() {
-        return latitude;
+    public double getCurrentLongitude() {
+        return currentLongitude;
     }
 
-    public void setLatitude(double latitude) {
-        this.latitude = latitude;
+    public void setCurrentLongitude(double currentLongitude) {
+        this.currentLongitude = currentLongitude;
     }
 
-    public double getLongitude() {
-        return longitude;
+    public double getDestinationLatitude() {
+        return destinationLatitude;
     }
 
-    public void setLongitude(double longitude) {
-        this.longitude = longitude;
+    public void setDestinationLatitude(double destinationLatitude) {
+        this.destinationLatitude = destinationLatitude;
     }
 
-    @Override
-    public String toString() {
-        return latitude + ":" + longitude;
+    public double getDestinationLongitude() {
+        return destinationLongitude;
+    }
+
+    public void setDestinationLongitude(double destinationLongitude) {
+        this.destinationLongitude = destinationLongitude;
+    }
+
+    public String getFacebookId() {
+        return facebookId;
+    }
+
+    public void setFacebookId(String facebookId) {
+        this.facebookId = facebookId;
     }
 }
