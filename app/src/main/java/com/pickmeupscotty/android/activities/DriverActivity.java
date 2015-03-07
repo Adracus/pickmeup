@@ -27,7 +27,7 @@ public class DriverActivity extends Activity {
             public void on(PickUpRequest request) {
                 int duration = Toast.LENGTH_SHORT;
 
-                Toast toast = Toast.makeText(getApplicationContext(), request.name, duration);
+                Toast toast = Toast.makeText(getApplicationContext(), request.toString(), duration);
                 toast.show();
             }
         });

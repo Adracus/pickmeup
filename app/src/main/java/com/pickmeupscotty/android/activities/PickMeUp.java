@@ -16,7 +16,9 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.pickmeupscotty.android.R;
+import com.pickmeupscotty.android.amqp.RabbitService;
 import com.pickmeupscotty.android.maps.LocationAware;
+import com.pickmeupscotty.android.messages.PickUpRequest;
 
 public class PickMeUp extends LocationAware {
     private MapFragment mMapFragment;
@@ -34,7 +36,9 @@ public class PickMeUp extends LocationAware {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(PickMeUp.this, "You did it", Toast.LENGTH_SHORT).show();
+                PickUpRequest request = new PickUpRequest(mLastLocation);
+                RabbitService.send(request);
+                Toast.makeText(PickMeUp.this, "Sent a pickup request", Toast.LENGTH_SHORT).show();
             }
         });
         fab.setEnabled(false);
