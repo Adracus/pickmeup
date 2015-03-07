@@ -60,6 +60,6 @@
         android:layout_below="@+id/textView2"
         android:layout_alignStart="@+id/textView2"
         android:layout_alignParentBottom="true"
-        android:layout_alignEnd="@+id/pink_icon"
+        android:layout_alignEnd="@+id/pickup_button"
         android:textSize="24dp" />
 </RelativeLayout>

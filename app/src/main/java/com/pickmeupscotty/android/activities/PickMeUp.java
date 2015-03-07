@@ -29,6 +29,7 @@ public class PickMeUp extends LocationAware {
         setContentView(R.layout.activity_pick_me_up);
         mMapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
         mMap = mMapFragment.getMap();
+
         fab = (FloatingActionButton) findViewById(R.id.pickup_button);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
