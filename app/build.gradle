@@ -23,6 +23,7 @@ repositories { mavenCentral() }
 
 dependencies {
     compile (
+            [group: 'com.google.android.gms', name: 'play-services', version: '6.5.87'],
             [group: 'com.facebook.android', name: 'facebook-android-sdk', version: '3.23.0'],
             [group: 'com.rabbitmq', name: 'amqp-client', version: '3.4.4']
     )
