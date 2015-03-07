@@ -1,0 +1,28 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/driver_activity"
+    tools:context="com.pickmeupscotty.android.activities.DriverActivity">
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_centerInParent="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/steering_wheel"
+        android:id="@+id/steering_wheel" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Waiting for friends to\nask for pick up ..."
+        android:id="@+id/textView"
+        android:textColor="@android:color/white"
+        android:textSize="40dp"
+        android:layout_marginBottom="130dp"
+        android:autoText="false"
+        android:gravity="center_horizontal"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true" />
+
+</RelativeLayout>

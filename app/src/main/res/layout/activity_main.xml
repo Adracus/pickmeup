@@ -12,25 +12,28 @@
         android:id="@+id/background_image" />
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="I&apos;m Driving"
         android:id="@+id/drivingButton"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="165dp"
-        style="@android:style/Widget.Material.ActionButton"
-        android:background="#ffffcc72" />
+        style="@android:style/Widget.Material.Button"
+        android:onClick="startDriverActivity"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginBottom="120dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Pick Me Up"
         android:id="@+id/pickMeUpButton"
-        android:layout_below="@+id/drivingButton"
-        android:layout_centerHorizontal="true"
-        style="@android:style/Widget.Material.Light.ActionButton"
-        android:background="#ffffcc72"
-        android:layout_marginTop="15dp" />
+        style="@android:style/Widget.Material.Button"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginBottom="60dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
