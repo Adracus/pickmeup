@@ -29,6 +29,10 @@ public class StartActivity extends FragmentActivity {
 
         setContentView(R.layout.activity_start);
 
+        registerFacebookStateChangeListener();
+    }
+
+    private void registerFacebookStateChangeListener() {
         FBWrapper.INSTANCE.addFacebookLoginOpenedListener(new FBWrapper.FacebookLoginStateListener() {
             @Override
             public void onStateChanged() {
@@ -37,22 +41,6 @@ public class StartActivity extends FragmentActivity {
                 startActivity(intent);
             }
         });
-
-//        if (savedInstanceState == null) {
-//            //Add the fragment on initial activity setup
-//            LoginFragment loginFragment = new LoginFragment();
-//
-//            if (Session.getActiveSession().isOpened()) {
-//                getSupportFragmentManager()
-//                        .beginTransaction()
-//                        .remove(loginFragment)
-//                        .commit();
-//            }
-//        } else {
-//            // Or set the fragment from restored state info
-//            //loginFragment = (LoginFragment) getSupportFragmentManager().findFragmentById(R.id.login_fragment);
-//        }
-
     }
 
     @Override
@@ -90,6 +78,8 @@ public class StartActivity extends FragmentActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
+        registerFacebookStateChangeListener();
     }
 
     @Override
