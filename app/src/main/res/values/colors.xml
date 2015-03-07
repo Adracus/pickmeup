@@ -9,6 +9,6 @@
     <color name="pink_pressed">#ec407a</color>
     <color name="blue_semi_transparent">#805677fc</color>
     <color name="blue_semi_transparent_pressed">#80738ffe</color>
-    <color name="lightblue">#15D9E7</color>
-    <color name="lightblue_pressed">#6AE5EE</color>
+    <color name="brand_color">#4abc96</color>
+    <color name="brand_color_light">#89D3BB</color>
 </resources>

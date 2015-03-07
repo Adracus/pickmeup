@@ -14,7 +14,7 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="I&apos;m Driving"
+        android:text="I&apos;M DRIVING"
         android:id="@+id/drivingButton"
         style="@android:style/Widget.Material.Button"
         android:onClick="startDriverActivity"
@@ -23,12 +23,14 @@
         android:layout_marginBottom="120dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:visibility="visible" />
+        android:visibility="visible"
+        android:elevation="1dp"
+        android:background="@color/brand_color" />
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Pick Me Up"
+        android:text="PICK ME UP"
         android:id="@+id/pickMeUpButton"
         style="@android:style/Widget.Material.Button"
         android:onClick="startPickMeUpActivity"
@@ -37,6 +39,8 @@
         android:layout_marginBottom="60dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:visibility="visible" />
+        android:visibility="visible"
+        android:elevation="1dp"
+        android:background="@color/brand_color" />
 
 </RelativeLayout>
