@@ -17,6 +17,22 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+}
+
+android {
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES.txt'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/dependencies.txt'
+        exclude 'META-INF/LGPL2.1'
+    }
 }
 
 repositories { mavenCentral() }
@@ -26,7 +42,7 @@ dependencies {
             [group: 'com.google.android.gms', name: 'play-services', version: '6.5.87'],
             [group: 'com.facebook.android', name: 'facebook-android-sdk', version: '3.23.0'],
             [group: 'com.rabbitmq', name: 'amqp-client', version: '3.4.4'],
-            [group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.5.1'],
+//            [group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.5.1'],
             [group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.5.1']
     )
     compile fileTree(dir: 'libs', include: ['*.jar'])
