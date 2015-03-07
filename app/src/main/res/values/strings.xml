@@ -1,7 +1,7 @@
 <resources>
-    <string name="app_name">Android</string>
+    <string name="app_name">PickMeUpScotty</string>
 
-    <string name="facebook_app_id"></string>
+    <string name="facebook_app_id">621523524646354</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
