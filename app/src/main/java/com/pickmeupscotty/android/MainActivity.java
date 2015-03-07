@@ -11,6 +11,7 @@ import com.pickmeupscotty.android.activities.DriverActivity;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.pickmeupscotty.android.activities.PickMeUp;
 import com.pickmeupscotty.android.amqp.MessageConsumer;
 import com.pickmeupscotty.android.amqp.RabbitService;
 import com.pickmeupscotty.android.amqp.Subscriber;
@@ -28,8 +29,6 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         RabbitService.create(getApplicationContext());
-
-
     }
 
 
@@ -61,7 +60,8 @@ public class MainActivity extends Activity {
     }
 
     public void startPickMeUpActivity(View view) {
-        RabbitService.send(new PickUpRequest());
+        Intent intent = new Intent(this, PickMeUp.class);
+        startActivity(intent);
     }
 
     @Override
