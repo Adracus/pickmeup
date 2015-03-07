@@ -1,6 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" tools:context=".MainActivity">
+    android:layout_height="match_parent" tools:context=".MainActivity"
+    style="@style/AppTheme">
 
     <ImageView
         android:layout_width="fill_parent"
@@ -17,7 +18,9 @@
         android:id="@+id/drivingButton"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="165dp" />
+        android:layout_marginTop="165dp"
+        style="@android:style/Widget.Material.ActionButton"
+        android:background="#ffffcc72" />
 
     <Button
         android:layout_width="wrap_content"
@@ -25,6 +28,9 @@
         android:text="Pick Me Up"
         android:id="@+id/pickMeUpButton"
         android:layout_below="@+id/drivingButton"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        style="@android:style/Widget.Material.Light.ActionButton"
+        android:background="#ffffcc72"
+        android:layout_marginTop="15dp" />
 
 </RelativeLayout>
