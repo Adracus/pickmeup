@@ -17,10 +17,12 @@ import com.google.android.gms.maps.model.LatLng;
 import com.pickmeupscotty.android.R;
 import com.pickmeupscotty.android.amqp.RabbitService;
 import com.pickmeupscotty.android.amqp.Subscriber;
+import com.pickmeupscotty.android.login.FBWrapper;
 import com.pickmeupscotty.android.maps.ChooseDestinationDialogFragment;
 import com.pickmeupscotty.android.maps.ChoosePlaceDialogFragment;
 import com.pickmeupscotty.android.maps.GooglePlaces;
 import com.pickmeupscotty.android.maps.LocationAware;
+import com.pickmeupscotty.android.messages.PickUpRequest;
 import com.pickmeupscotty.android.messages.PickUpResponse;
 
 import java.util.List;
@@ -111,10 +113,22 @@ public class PickMeUp extends LocationAware implements ChooseDestinationDialogFr
     }
 
     @Override
-    public void placeChosen(GooglePlaces.Place place) {
-        Toast
-                .makeText(this, place.getName(), Toast.LENGTH_LONG)
-                .show();
+    public void placeChosen(final GooglePlaces.Place place) {
+        FBWrapper.INSTANCE.getUserId(new FBWrapper.UserIdCallback() {
+            @Override
+            public void onCompleted(String fbid) {
+                PickUpRequest request = new PickUpRequest(
+                        mLastLocation.getLatitude(),
+                        mLastLocation.getLongitude(),
+                        place.getLatitude(),
+                        place.getLongitude(),
+                        fbid);
+                RabbitService.send(request, fbid);
+                Toast
+                        .makeText(PickMeUp.this, "Sent pickup request", Toast.LENGTH_SHORT)
+                        .show();
+            }
+        });
     }
 
     @Override

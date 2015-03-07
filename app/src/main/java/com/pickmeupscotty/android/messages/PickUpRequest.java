@@ -25,6 +25,9 @@ public class PickUpRequest implements Message {
         this.facebookId = facebookId;
     }
 
+    public PickUpRequest() {
+    }
+
     public double getCurrentLatitude() {
         return currentLatitude;
     }
