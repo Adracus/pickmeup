@@ -78,7 +78,7 @@ public class RabbitService {
 
     private abstract class SubscribeRunner implements Runnable {
 
-        private Subscriber<Message> sub;
+        protected Subscriber<Message> sub;
 
         public SubscribeRunner(Subscriber<Message> sub) {
             this.sub = sub;

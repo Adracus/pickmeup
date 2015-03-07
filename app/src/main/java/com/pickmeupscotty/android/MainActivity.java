@@ -11,6 +11,7 @@ import com.pickmeupscotty.android.activities.DriverActivity;
 
 import com.pickmeupscotty.android.activities.PickMeUp;
 import com.pickmeupscotty.android.amqp.RabbitService;
+import com.pickmeupscotty.android.services.NotificationService;
 
 
 public class MainActivity extends Activity {
@@ -21,7 +22,8 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         RabbitService.create("myFacebookID");
-
+        Intent mServiceIntent = new Intent(this, NotificationService.class);
+        startService(mServiceIntent);
     }
 
 

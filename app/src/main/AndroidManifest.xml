@@ -61,6 +61,12 @@
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:label="@string/title_activity_driver" >
         </activity>
+
+
+        <service
+            android:name=".services.NotificationService"
+            android:exported="false"/>
+
     </application>
 
 </manifest>
