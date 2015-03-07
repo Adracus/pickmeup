@@ -4,15 +4,29 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import com.pickmeupscotty.android.R;
+import com.pickmeupscotty.android.amqp.RabbitService;
+import com.pickmeupscotty.android.messages.PickUpResponse;
 
 public class ResponseActivity extends Activity {
+
+    private String facebookId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_response);
+        facebookId = getIntent().getStringExtra("FACEBOOK_ID");
+
+        TextView nameView = (TextView) findViewById(R.id.textView4);
+        nameView.setText(facebookId);
+    }
+
+    public void acceptPickUp(View view) {
+        RabbitService.send(new PickUpResponse(), facebookId);
     }
 
 

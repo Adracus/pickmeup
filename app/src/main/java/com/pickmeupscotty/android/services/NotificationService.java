@@ -1,18 +1,16 @@
 package com.pickmeupscotty.android.services;
 
 import android.app.IntentService;
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 import android.widget.Toast;
 
-import com.pickmeupscotty.android.MainActivity;
 import com.pickmeupscotty.android.R;
 import com.pickmeupscotty.android.activities.DriverActivity;
+import com.pickmeupscotty.android.activities.ResponseActivity;
 import com.pickmeupscotty.android.amqp.RabbitService;
 import com.pickmeupscotty.android.amqp.Subscriber;
 import com.pickmeupscotty.android.messages.PickUpRequest;
@@ -39,16 +37,22 @@ public class NotificationService extends IntentService {
 
                 Context context = getApplicationContext();
 
-                Intent notificationIntent = new Intent(context, DriverActivity.class);
+
+                // berechne ob notification angezeigt werden soll.
+
+                Intent notificationIntent = new Intent(context, ResponseActivity.class);
+//                notificationIntent.putExtra("FACEBOOK_ID", request.facebookid);
+                notificationIntent.putExtra("FACEBOOK_ID", "facebookid");
 
                 PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
 
-                NotificationCompat.Builder notification = new NotificationCompat.Builder(getApplicationContext()).setContentTitle("Test").setContentText("Test").setSmallIcon(R.drawable.notification);
+                NotificationCompat.Builder notification = new NotificationCompat.Builder(getApplicationContext())
+                        .setContentTitle("Test")
+                        .setContentText("Test")
+                        .setSmallIcon(R.drawable.notification);
                 notification = notification
                         .setContentIntent(contentIntent);
 
-
-                Log.d("test", request.toString());
 
                 NotificationManager mNotificationManager =
                         (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -58,15 +62,13 @@ public class NotificationService extends IntentService {
 
                 Toast toast = Toast.makeText(getApplicationContext(), request.toString(), duration);
                 toast.show();
+
+
             }
         });
 
         while (true) {
-//            try true{
                 Thread.yield();
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
         }
 
     }

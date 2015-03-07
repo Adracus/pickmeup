@@ -25,14 +25,15 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        RabbitService.create("facebook");
-        FBWrapper.INSTANCE.addFacebookLoginStateListener(new FBWrapper.FacebookLoginStateListener() {
+        RabbitService.create("facebookid");
+        FBWrapper.INSTANCE.addFacebookLoginOpenedListener(new FBWrapper.FacebookLoginStateListener() {
             @Override
-            public void onStateChanged(SessionState sessionState) {
+            public void onStateChanged() {
                 FBWrapper.INSTANCE.getUserId(new FBWrapper.UserIdCallback() {
                                                  @Override
                                                  public void onCompleted(String fbid) {
-                                                     Log.e("facebook", fbid);
+                                                     Log.e("test", fbid);
+                                                     RabbitService.create(fbid);
                                                  }
                    }
 

@@ -15,8 +15,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.pickmeupscotty.android.R;
 import com.pickmeupscotty.android.amqp.RabbitService;
+import com.pickmeupscotty.android.amqp.Subscriber;
 import com.pickmeupscotty.android.maps.LocationAware;
 import com.pickmeupscotty.android.messages.PickUpRequest;
+import com.pickmeupscotty.android.messages.PickUpResponse;
 
 public class PickMeUp extends LocationAware {
     private MapFragment mMapFragment;
@@ -40,6 +42,13 @@ public class PickMeUp extends LocationAware {
             }
         });
         fab.setEnabled(false);
+
+        RabbitService.subscribe(PickUpResponse.class, new Subscriber<PickUpResponse>() {
+            @Override
+            public void on(PickUpResponse request) {
+
+            }
+        });
     }
 
     @Override
