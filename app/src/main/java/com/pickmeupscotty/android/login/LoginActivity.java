@@ -1,18 +1,11 @@
 package com.pickmeupscotty.android.login;
 
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.Signature;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.util.Base64;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.pickmeupscotty.android.R;
-
-import java.security.MessageDigest;
 
 
 public class LoginActivity extends FragmentActivity {
@@ -22,22 +15,6 @@ public class LoginActivity extends FragmentActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
-        try {
-            PackageInfo info = getPackageManager().getPackageInfo(
-                    "com.pickmeupscotty.android",
-                    PackageManager.GET_SIGNATURES);
-            for (Signature signature : info.signatures) {
-                MessageDigest md = MessageDigest.getInstance("SHA");
-                md.update(signature.toByteArray());
-                Log.i(TAG, "KeyHash:");
-                Log.i(TAG, Base64.encodeToString(md.digest(), Base64.DEFAULT));
-            }
-        } catch (Exception e) {
-            Log.i(TAG, "EXCEPTION:");
-            Log.i(TAG, e.toString());
-        }
 
         if (savedInstanceState == null) {
             // Add the fragment on initial activity setup
