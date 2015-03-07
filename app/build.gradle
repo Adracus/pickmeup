@@ -47,4 +47,6 @@ dependencies {
             [group: 'com.getbase', name: 'floatingactionbutton', version: '1.8.0']
     )
     compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'com.android.support:cardview-v7:21.0.+'
+    compile 'com.android.support:recyclerview-v7:21.0.+'
 }
