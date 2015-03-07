@@ -49,6 +49,8 @@ public class MainActivity extends FragmentActivity {
         FBWrapper.INSTANCE.addFacebookLoginOpenedListener(new FBWrapper.FacebookLoginStateListener() {
             @Override
             public void onStateChanged() {
+                Log.i(TAG, "State changed to open!");
+
                 drivingButton.setVisibility(Button.VISIBLE);
                 pickMeUpButton.setVisibility(Button.VISIBLE);
             }
