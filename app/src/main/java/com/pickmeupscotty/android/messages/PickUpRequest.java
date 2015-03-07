@@ -8,6 +8,10 @@ public class PickUpRequest implements Message {
     private double latitude;
     private double longitude;
 
+    public PickUpRequest() {
+
+    }
+
     public PickUpRequest(double latitude, double longitude) {
         this.latitude = latitude;
         this.longitude = longitude;
