@@ -35,6 +35,20 @@ public class LoginFragment extends Fragment {
 
         uiHelper = new UiLifecycleHelper(getActivity(), FBWrapper.INSTANCE);
         uiHelper.onCreate(savedInstanceState);
+
+        FBWrapper.INSTANCE.addFacebookLoginOpenedListener(new FBWrapper.FacebookLoginStateListener() {
+            @Override
+            public void onStateChanged() {
+                FBWrapper.INSTANCE.getFBFriends(new Request.GraphUserListCallback() {
+                    @Override
+                    public void onCompleted(List<GraphUser> graphUsers, Response response) {
+                        for (GraphUser u : graphUsers) {
+                            Log.i(TAG, u.getId());
+                        }
+                    }
+                });
+            }
+        });
     }
 
     @Override

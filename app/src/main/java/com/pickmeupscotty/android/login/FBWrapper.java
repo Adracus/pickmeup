@@ -19,22 +19,38 @@ import com.facebook.model.GraphUser;
 public enum FBWrapper implements Session.StatusCallback {
     INSTANCE();
 
-    private ArrayList<FacebookLoginStateListener> stateChangeListener;
+    private ArrayList<FacebookLoginStateListener> stateOpenListener;
+    private ArrayList<FacebookLoginStateListener> stateCloseListener;
 
     private List<GraphUser> myFriends;
     private GraphUser me;
 
     FBWrapper() {
-        stateChangeListener = new ArrayList<>();
+        stateOpenListener = new ArrayList<>();
+        stateCloseListener = new ArrayList<>();
     }
 
-    public void addFacebookLoginStateListener(FacebookLoginStateListener l) {
-        stateChangeListener.add(l);
+    public void addFacebookLoginOpenedListener(FacebookLoginStateListener l) {
+        stateOpenListener.add(l);
+    }
+
+    public void addFacebookLoginClosedListener(FacebookLoginStateListener l) {
+        stateOpenListener.add(l);
     }
 
     private void fireFacebookLoginStateListener(SessionState sessionState) {
-        for (FacebookLoginStateListener l : stateChangeListener) {
-            l.onStateChanged(sessionState);
+        ArrayList<FacebookLoginStateListener> listener = null;
+        if (sessionState == SessionState.OPENED) {
+            listener = stateOpenListener;
+        }
+        else if (sessionState == SessionState.CLOSED) {
+            listener = stateCloseListener;
+        }
+
+        if (listener == null) return;
+
+        for (FacebookLoginStateListener l : listener) {
+            l.onStateChanged();
         }
     }
 
@@ -102,7 +118,7 @@ public enum FBWrapper implements Session.StatusCallback {
         getMyUser(new Request.GraphUserCallback() {
             @Override
             public void onCompleted(GraphUser graphUser, Response response) {
-                callback.onCompleted(me.getId());
+                callback.onCompleted(graphUser.getId());
             }
         });
     }
@@ -116,6 +132,6 @@ public enum FBWrapper implements Session.StatusCallback {
     }
 
     public interface FacebookLoginStateListener {
-        public void onStateChanged(SessionState sessionState);
+        public void onStateChanged();
     }
 }

@@ -42,14 +42,6 @@ public class MainActivity extends Activity {
 
         Intent mServiceIntent = new Intent(this, NotificationService.class);
         startService(mServiceIntent);
-
-
-        FBWrapper.INSTANCE.addFacebookLoginStateListener(new FBWrapper.FacebookLoginStateListener() {
-            @Override
-            public void onStateChanged(SessionState sessionState) {
-                Log.i(TAG, "StateChanged: " + sessionState);
-            }
-        });
     }
 
 
