@@ -20,16 +20,17 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@android:style/Theme.Material.Light.NoActionBar.Fullscreen" >
+        android:theme="@style/CustomActionBarTheme" >
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
+            android:theme="@style/CustomActionBarTheme" >
         </activity>
 
         <activity
             android:name=".StartActivity"
             android:label="@string/app_name"
+            android:noHistory="true"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
             <intent-filter android:label="@string/launcher_label">
                 <action android:name="android.intent.action.MAIN" />
@@ -61,20 +62,19 @@
         <activity
             android:name=".activities.DriverActivity"
             android:label="@string/title_activity_driver"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
+            android:theme="@style/CustomActionBarTheme" >
         </activity>
+
         <activity
             android:name=".activities.ResponseActivity"
             android:label="@string/title_activity_response"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:noHistory="true"
+            android:theme="@style/CustomActionBarTheme"
             android:exported="true">
         </activity>
-
 
         <service
             android:name=".services.NotificationService"
             android:exported="false"/>
-
     </application>
-
 </manifest>
