@@ -28,7 +28,19 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        RabbitService.create(getApplicationContext());
+        RabbitService.create(getApplicationContext(), "myFacebookID");
+
+//        RabbitService.subscribe(PickUpRequest.class, new Subscriber<PickUpRequest>() {
+//
+//            @Override
+//            public void on(PickUpRequest request) {
+//                int duration = Toast.LENGTH_SHORT;
+//
+//                Toast toast = Toast.makeText(getApplicationContext(), request.name, duration);
+//                toast.show();
+//            }
+//        });
+
     }
 
 

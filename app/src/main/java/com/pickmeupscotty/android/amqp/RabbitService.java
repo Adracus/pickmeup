@@ -5,6 +5,8 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
+import com.pickmeupscotty.android.messages.PickUpRequest;
+
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,7 +17,6 @@ public class RabbitService {
 
     private static RabbitService instance;
     private Context context;
-    private Runner runner;
     private Map<Class<?>, List<WeakReference<Subscriber<Message>>>> subscribers = new HashMap<>();
 
     private RabbitService(){
@@ -32,9 +33,7 @@ public class RabbitService {
     }
 
     public static <T extends Message> void subscribe(Class<T> requestType, Subscriber<T> sub) {
-
         getInstance().addSubscriber(requestType, sub);
-
     }
 
     private <T extends Message> void addSubscriber(Class<T> requestType, Subscriber<T> sub) {
@@ -44,20 +43,6 @@ public class RabbitService {
             list = subscribers.get(requestType);
         }
         list.add(new WeakReference<Subscriber<Message>>((Subscriber<Message>) sub));
-    }
-
-    private class Runner implements Runnable {
-
-        @Override
-        public void run() {
-
-            Log.e("RabbitService", "onStartCommand()");
-            mConsumer = new MessageConsumer("178.62.55.27");
-
-            mConsumer.connectToRabbitMQ();
-
-        }
-
     }
 
     public void sendToSubscribers(final Message message) {
@@ -71,6 +56,7 @@ public class RabbitService {
             }
         }
     }
+
 
     private class SubscribeRunner implements Runnable {
 
@@ -87,16 +73,22 @@ public class RabbitService {
             sub.on(message);
         }
     }
-    public void connect() {
-        
-        runner = new Runner();
-        new Thread(runner).start();
+    public void connect(final String facebookID) {
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                mConsumer = new MessageConsumer("178.62.55.27");
+
+                mConsumer.connectToRabbitMQ(facebookID);
+            }
+        }).start();
         // The service is starting, due to a call to startService()
     }
 
-    public static void create(Context context) {
+    public static void create(Context context, String facebookID) {
         getInstance().setContext(context);
-        getInstance().connect();
+        getInstance().connect(facebookID);
     }
 
 
@@ -104,8 +96,17 @@ public class RabbitService {
         this.context = context;
     }
 
-    public static boolean send(Message pickUpMessage) {
-        return getInstance().sendRequest(pickUpMessage);
+    public static void send(Message pickUpMessage) {
+        getInstance().sendRequest(pickUpMessage);
+    }
+
+    public static void send(Message message, String myFacebookID) {
+        getInstance().sendRequest(message, myFacebookID);
+    }
+
+    private boolean sendRequest(Message pickUpMessage, String myFacebookID) {
+        mConsumer.send(pickUpMessage, myFacebookID);
+        return false;
     }
 
     private boolean sendRequest(Message pickUpMessage) {
@@ -113,11 +114,3 @@ public class RabbitService {
         return false;
     }
 }
-//mOutput =  (TextView) findViewById(R.id.rabbitmessage);
-//
-//        Intent intent = new Intent(this, RabbitService.class);
-//        startService(intent);
-
-
-//
-//            }

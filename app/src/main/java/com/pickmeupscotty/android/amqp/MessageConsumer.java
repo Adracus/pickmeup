@@ -54,8 +54,7 @@ public class MessageConsumer extends  IConnectToRabbitMQ{
     /**
      * Create Exchange and then start consuming. A binding needs to be added before any messages will be delivered
      */
-    @Override
-    public boolean connectToRabbitMQ()
+    public boolean connectToRabbitMQ(String mFaceBookID)
     {
         if(super.connectToRabbitMQ())
         {
@@ -64,6 +63,8 @@ public class MessageConsumer extends  IConnectToRabbitMQ{
                 mQueue = mModel.queueDeclare().getQueue();
                 MySubscription = new QueueingConsumer(mModel);
                 mModel.basicConsume(mQueue, false, MySubscription);
+//                mModel.exchangeDeclare(mFaceBookID, "fanout");
+//                mModel.queueBind(mQueue, mFaceBookID, "");
             } catch (IOException e) {
                 e.printStackTrace();
                 return false;
@@ -152,5 +153,27 @@ public class MessageConsumer extends  IConnectToRabbitMQ{
 
     public void dispose(){
         Running = false;
+    }
+
+    public void send(final Message message, final String myFacebookID) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    HashMap<String, Object> headers = new HashMap<>();
+
+                    headers.put("CLASS", message.getClass().getName());
+
+                    ObjectMapper mapper = new ObjectMapper();
+                    byte[] messageBodyBytes =  mapper.writeValueAsBytes(message);
+                    mModel.basicPublish(myFacebookID, "", new AMQP.BasicProperties.Builder()
+                            .headers(headers)
+                            .build(), messageBodyBytes);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }).start();
     }
 }
