@@ -25,7 +25,20 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        RabbitService.create("myFacebookID");
+        RabbitService.create("facebook");
+        FBWrapper.INSTANCE.addFacebookLoginStateListener(new FBWrapper.FacebookLoginStateListener() {
+            @Override
+            public void onStateChanged(SessionState sessionState) {
+                FBWrapper.INSTANCE.getUserId(new FBWrapper.UserIdCallback() {
+                                                 @Override
+                                                 public void onCompleted(String fbid) {
+                                                     Log.e("facebook", fbid);
+                                                 }
+                   }
+
+                );
+            }
+        });
 
         Intent mServiceIntent = new Intent(this, NotificationService.class);
         startService(mServiceIntent);
