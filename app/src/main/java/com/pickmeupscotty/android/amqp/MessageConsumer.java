@@ -10,7 +10,9 @@ import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.QueueingConsumer;
 
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  *Consumes messages from a RabbitMQ broker
@@ -32,67 +34,27 @@ public class MessageConsumer extends  IConnectToRabbitMQ{
     private byte[] mLastMessage;
     private String mLastType;
 
-    public void send(Request request) {
-        try {
-            HashMap<String, Object> headers = new HashMap<>();
+    public void send(final Request request) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    HashMap<String, Object> headers = new HashMap<>();
 
-            headers.put("CLASS", request.getClass().getName());
+                    headers.put("CLASS", request.getClass().getName());
 
-            ObjectMapper mapper = new ObjectMapper();
-            byte[] messageBodyBytes =  mapper.writeValueAsBytes(request);
-            mModel.basicPublish(EXCHANGE, "", new AMQP.BasicProperties.Builder()
-                    .headers(headers)
-                    .build(), messageBodyBytes);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+                    ObjectMapper mapper = new ObjectMapper();
+                    byte[] messageBodyBytes =  mapper.writeValueAsBytes(request);
+                    mModel.basicPublish(EXCHANGE, "", new AMQP.BasicProperties.Builder()
+                            .headers(headers)
+                            .build(), messageBodyBytes);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
-    // An interface to be implemented by an object that is interested in messages(listener)
-    public interface OnReceiveMessageHandler{
-        public void onReceiveMessage(Request request);
-    };
-
-    //A reference to the listener, we can only have one at a time(for now)
-    private OnReceiveMessageHandler mOnReceiveMessageHandler;
-
-    /**
-     *
-     * Set the callback for received messages
-     * @param handler The callback
-     */
-    public void setOnReceiveMessageHandler(OnReceiveMessageHandler handler){
-        mOnReceiveMessageHandler = handler;
-    };
-
-    private Handler mMessageHandler = new Handler(Looper.getMainLooper());
-    private Handler mConsumeHandler = new Handler(Looper.getMainLooper());
-
-    // Create runnable for posting back to main thread
-    final Runnable mReturnMessage = new Runnable() {
-        public void run() {
-            try {
-                Class<Request> clazz = (Class<Request>) Class.forName(mLastType);
-                ObjectMapper mapper = new ObjectMapper();
-                Request request = mapper.readValue(mLastMessage, clazz);
-                mOnReceiveMessageHandler.onReceiveMessage(request);
-            } catch (ClassNotFoundException | ClassCastException e) {
-                e.printStackTrace();
-            } catch (JsonMappingException e) {
-                e.printStackTrace();
-            } catch (JsonParseException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
             }
-        }
-    };
-
-    final Runnable mConsumeRunner = new Runnable() {
-        public void run() {
-            Consume();
-        }
-    };
+        }).start();
+    }
 
     /**
      * Create Exchange and then start consuming. A binding needs to be added before any messages will be delivered
@@ -115,8 +77,8 @@ public class MessageConsumer extends  IConnectToRabbitMQ{
                 AddBinding("");//fanout has default binding
 
             Running = true;
-            mConsumeHandler.post(mConsumeRunner);
-//            Consume();
+//            mConsumeHandler.post(mConsumeRunner);
+            Consume();
 
             return true;
         }
@@ -164,7 +126,20 @@ public class MessageConsumer extends  IConnectToRabbitMQ{
                         delivery = MySubscription.nextDelivery();
                         mLastMessage = delivery.getBody();
                         mLastType = delivery.getProperties().getHeaders().get("CLASS").toString();
-                        mMessageHandler.post(mReturnMessage);
+                        try {
+                            Class<Request> clazz = (Class<Request>) Class.forName(mLastType);
+                            ObjectMapper mapper = new ObjectMapper();
+                            Request request = mapper.readValue(mLastMessage, clazz);
+                            RabbitService.getInstance().sendToSubscribers(request);
+                        } catch (ClassNotFoundException | ClassCastException e) {
+                            e.printStackTrace();
+                        } catch (JsonMappingException e) {
+                            e.printStackTrace();
+                        } catch (JsonParseException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                         try {
                             mModel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
                         } catch (IOException e) {

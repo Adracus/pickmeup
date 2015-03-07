@@ -1,6 +1,8 @@
 package com.pickmeupscotty.android.amqp;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -59,25 +61,36 @@ public class RabbitService {
 
             mConsumer.connectToRabbitMQ();
 
-            mConsumer.setOnReceiveMessageHandler(new MessageConsumer.OnReceiveMessageHandler() {
-
-                public void onReceiveMessage(Request request) {
-
-                    List<WeakReference<Subscriber<Request>>> list = subscribers.get(request.getClass());
-
-                    if(list != null) {
-                        for (WeakReference<Subscriber<Request>> sub : list) {
-                            if (sub.get() != null) {
-                                sub.get().on(request);
-
-                            }
-                        }
-                    }
-
-                }
-            });
         }
 
+    }
+
+    public void sendToSubscribers(final Request request) {
+        List<WeakReference<Subscriber<Request>>> list = subscribers.get(request.getClass());
+
+        if(list != null) {
+            for (WeakReference<Subscriber<Request>> sub : list) {
+                if (sub.get() != null) {
+                    new Handler(Looper.getMainLooper()).post(new SubscribeRunner(sub.get(), request));
+                }
+            }
+        }
+    }
+
+    private class SubscribeRunner implements Runnable {
+
+        private Subscriber<Request> sub;
+        private Request request;
+
+        public SubscribeRunner(Subscriber<Request> sub, Request request) {
+            this.sub = sub;
+            this.request = request;
+        }
+
+        @Override
+        public void run() {
+            sub.on(request);
+        }
     }
     public void connect() {
         
@@ -101,11 +114,6 @@ public class RabbitService {
     }
 
     private boolean sendRequest(Request pickUpRequest) {
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         mConsumer.send(pickUpRequest);
         return false;
     }
