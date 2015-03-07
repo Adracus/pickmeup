@@ -10,4 +10,5 @@
     <string name="title_activity_pick_me_up">Pick Me Up</string>
     <string name="title_activity_driver">DriverActivity</string>
     <string name="icon_car">&#xf1b9;</string>
+    <string name="title_activity_response">ResponseActivity</string>
 </resources>

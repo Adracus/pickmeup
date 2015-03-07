@@ -1,0 +1,82 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.pickmeupscotty.android.activities.ResponseActivity"
+    android:background="@drawable/tramperin">
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_centerInParent="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/tramperin"
+        android:id="@+id/background_image" />
+
+    <android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/card_view"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        card_view:cardUseCompatPadding="true"
+        card_view:cardElevation="2dp"
+        card_view:cardCornerRadius="0dp"
+        card_view:cardBackgroundColor="#aaffffff"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_marginBottom="@dimen/activity_vertical_margin" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_margin="10dp">
+
+                <TextView
+                    android:id="@+id/pick_up_request_from"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Pick Up Request from"
+                    android:textColor="@android:color/black"
+                    android:textSize="32dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="&lt;Name>"
+                    android:id="@+id/textView4"
+                    android:textColor="@android:color/black"
+                    android:textSize="32dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="10dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                android:layout_alignParentBottom="true">
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    style="@android:style/Widget.Material.Button"
+                    android:text="Decline">
+                </Button>
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    style="@android:style/Widget.Material.Button"
+                    android:text="Accept">
+                </Button>
+            </LinearLayout>
+
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+</RelativeLayout>
