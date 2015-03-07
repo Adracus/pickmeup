@@ -3,18 +3,22 @@ package com.pickmeupscotty.android;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.facebook.SessionState;
 import com.pickmeupscotty.android.activities.DriverActivity;
 
 import com.pickmeupscotty.android.activities.PickMeUp;
 import com.pickmeupscotty.android.amqp.RabbitService;
 import com.pickmeupscotty.android.services.NotificationService;
+import com.pickmeupscotty.android.login.FBWrapper;
 
 
 public class MainActivity extends Activity {
+    private static final String TAG = MainActivity.class.getName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,8 +26,17 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         RabbitService.create("myFacebookID");
+
         Intent mServiceIntent = new Intent(this, NotificationService.class);
         startService(mServiceIntent);
+
+
+        FBWrapper.INSTANCE.addFacebookLoginStateListener(new FBWrapper.FacebookLoginStateListener() {
+            @Override
+            public void onStateChanged(SessionState sessionState) {
+                Log.i(TAG, "StateChanged: " + sessionState);
+            }
+        });
     }
 
 

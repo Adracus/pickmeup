@@ -10,20 +10,37 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import com.facebook.SessionState;
 import com.facebook.model.GraphUser;
 
 /**
  * Created by florian on 07.03.15.
  */
-public enum FBWrapper {
+public enum FBWrapper implements Session.StatusCallback {
     INSTANCE();
 
-    private ArrayList<String> friends;
+    private ArrayList<FacebookLoginStateListener> stateChangeListener;
+
     private List<GraphUser> myFriends;
     private GraphUser me;
 
     FBWrapper() {
-        this.friends = new ArrayList<>();
+        stateChangeListener = new ArrayList<>();
+    }
+
+    public void addFacebookLoginStateListener(FacebookLoginStateListener l) {
+        stateChangeListener.add(l);
+    }
+
+    private void fireFacebookLoginStateListener(SessionState sessionState) {
+        for (FacebookLoginStateListener l : stateChangeListener) {
+            l.onStateChanged(sessionState);
+        }
+    }
+
+    @Override
+    public void call(Session session, SessionState sessionState, Exception e) {
+        fireFacebookLoginStateListener(sessionState);
     }
 
     public void getFBFriends(final Request.GraphUserListCallback callback) {
@@ -96,5 +113,9 @@ public enum FBWrapper {
 
     public interface IsMyFriendCallback {
         public void onCompleted(boolean isMyFriend);
+    }
+
+    public interface FacebookLoginStateListener {
+        public void onStateChanged(SessionState sessionState);
     }
 }

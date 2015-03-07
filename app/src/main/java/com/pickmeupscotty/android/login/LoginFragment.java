@@ -29,31 +29,11 @@ public class LoginFragment extends Fragment {
     private UiLifecycleHelper uiHelper;
     private static final String TAG = LoginFragment.class.getName();
 
-    private Session.StatusCallback statusCallback = new Session.StatusCallback() {
-        @Override
-        public void call(Session session, SessionState state, Exception exception) {
-            if (state.isOpened()) {
-                Log.i(TAG, "Logged in...");
-
-                FBWrapper.INSTANCE.getFBFriends(new Request.GraphUserListCallback() {
-                    @Override
-                    public void onCompleted(List<GraphUser> graphUsers, Response response) {
-                        for (GraphUser g : graphUsers) {
-                            Log.i(TAG, g.getFirstName() + g.getLastName());
-                        }
-                    }
-                });
-            } else if (state.isClosed()) {
-                Log.i(TAG, "Logged out...");
-            }
-        }
-    };
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        uiHelper = new UiLifecycleHelper(getActivity(), statusCallback);
+        uiHelper = new UiLifecycleHelper(getActivity(), FBWrapper.INSTANCE);
         uiHelper.onCreate(savedInstanceState);
     }
 
