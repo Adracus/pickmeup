@@ -1,8 +1,11 @@
 package com.pickmeupscotty.android.messages;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.pickmeupscotty.android.amqp.Message;
 
-public class PickUpRequest implements Message {
+public class PickUpRequest implements Message, Parcelable {
     public static String CURRENT_LATITUDE = "CURRENT_LATITUDE";
     public static String CURRENT_LONGITUDE = "CURRENT_LONGITUDE";
     public static String DESTINATION_LATITUDE = "DESTINATION_LATITUDE";
@@ -67,4 +70,39 @@ public class PickUpRequest implements Message {
     public void setFacebookId(String facebookId) {
         this.facebookId = facebookId;
     }
+
+    protected PickUpRequest(Parcel in) {
+        currentLatitude = in.readDouble();
+        currentLongitude = in.readDouble();
+        destinationLatitude = in.readDouble();
+        destinationLongitude = in.readDouble();
+        facebookId = in.readString();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeDouble(currentLatitude);
+        dest.writeDouble(currentLongitude);
+        dest.writeDouble(destinationLatitude);
+        dest.writeDouble(destinationLongitude);
+        dest.writeString(facebookId);
+    }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<PickUpRequest> CREATOR = new Parcelable.Creator<PickUpRequest>() {
+        @Override
+        public PickUpRequest createFromParcel(Parcel in) {
+            return new PickUpRequest(in);
+        }
+
+        @Override
+        public PickUpRequest[] newArray(int size) {
+            return new PickUpRequest[size];
+        }
+    };
 }
