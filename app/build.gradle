@@ -25,7 +25,9 @@ dependencies {
     compile (
             [group: 'com.google.android.gms', name: 'play-services', version: '6.5.87'],
             [group: 'com.facebook.android', name: 'facebook-android-sdk', version: '3.23.0'],
-            [group: 'com.rabbitmq', name: 'amqp-client', version: '3.4.4']
+            [group: 'com.rabbitmq', name: 'amqp-client', version: '3.4.4'],
+            [group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.5.1'],
+            [group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.5.1']
     )
     compile fileTree(dir: 'libs', include: ['*.jar'])
 }
