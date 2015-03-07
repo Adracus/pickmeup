@@ -30,6 +30,7 @@
         android:text="Pick Me Up"
         android:id="@+id/pickMeUpButton"
         style="@android:style/Widget.Material.Button"
+        android:onClick="startPickMeUpActivity"
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:layout_marginBottom="60dp"
