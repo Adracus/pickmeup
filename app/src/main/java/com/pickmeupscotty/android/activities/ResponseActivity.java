@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -17,51 +18,74 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.pickmeupscotty.android.R;
+import com.pickmeupscotty.android.amqp.RabbitService;
+import com.pickmeupscotty.android.maps.GooglePlaces;
 import com.pickmeupscotty.android.messages.PickUpRequest;
+
+import java.util.concurrent.ExecutionException;
+
+import javax.xml.datatype.Duration;
 
 public class ResponseActivity extends Activity {
     private MapFragment mMapFragment;
     private GoogleMap mMap;
     private boolean movedMap;
+    private PickUpRequest request;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_response);
 
-        PickUpRequest request = getIntent().getParcelableExtra(PickUpRequest.PICK_UP_REQUEST);
+        request = getIntent().getParcelableExtra(PickUpRequest.PICK_UP_REQUEST);
         TextView nameView = (TextView) findViewById(R.id.textView4);
         nameView.setText(request.getFacebookName());
 
-        mMapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.detourmap);
-        mMap = mMapFragment.getMap();
-        mMap.setMyLocationEnabled(true);
+        try {
+            GooglePlaces.Distance distance = GooglePlaces.durationBetweenAsync(
+                    request.getCurrentLatitude(),
+                    request.getCurrentLongitude(),
+                    request.getDestinationLatitude(),
+                    request.getDestinationLongitude()).get();
 
-        LatLng destinationPosition = new LatLng(
-                request.getDestinationLatitude(),
-                request.getDestinationLongitude());
-        LatLng currentPosition = new LatLng(
-                request.getCurrentLatitude(),
-                request.getCurrentLongitude());
+            mMapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.detourmap);
+            mMap = mMapFragment.getMap();
+            mMap.setMyLocationEnabled(true);
 
-        Marker home = mMap.addMarker(new MarkerOptions()
-                .position(destinationPosition)
-                .title("Destination")
-                .draggable(true));
+            LatLng destinationPosition = new LatLng(
+                    request.getDestinationLatitude(),
+                    request.getDestinationLongitude());
+            LatLng currentPosition = new LatLng(
+                    request.getCurrentLatitude(),
+                    request.getCurrentLongitude());
 
-        Marker work = mMap.addMarker(new MarkerOptions()
-                .position(currentPosition)
-                .title("Current")
-                .draggable(true));
+            Marker home = mMap.addMarker(new MarkerOptions()
+                    .position(destinationPosition)
+                    .title(request.getFacebookName())
+                    .snippet(distance.getDurationText() + " (" + distance.getDistanceText() + ") away")
+                    .draggable(true));
 
-        LatLngBounds.Builder bounds = new LatLngBounds.Builder();
-        bounds.include(destinationPosition);
-        bounds.include(currentPosition);
-        moveMapToBounds(CameraUpdateFactory.newLatLngBounds(bounds.build(), 50));
+            Marker work = mMap.addMarker(new MarkerOptions()
+                    .position(currentPosition)
+                    .title("Current")
+                    .draggable(true));
+
+            LatLngBounds.Builder bounds = new LatLngBounds.Builder();
+            bounds.include(destinationPosition);
+            bounds.include(currentPosition);
+            moveMapToBounds(CameraUpdateFactory.newLatLngBounds(bounds.build(), 50));
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
     }
 
     public void acceptPickUp(View view) {
-        //RabbitService.send(new PickUpResponse(), facebookId);
+        RabbitService.send(request, request.getFacebookId());
+
+        Toast.makeText(this, "Thanks for the ride!", Toast.LENGTH_SHORT).show();
+
         Intent intent = new Intent(this, DriverActivity.class);
         startActivity(intent);
     }

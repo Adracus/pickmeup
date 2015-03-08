@@ -210,5 +210,37 @@ public class GooglePlaces {
             this.meters = distance.getInt("value");
             this.distanceText = distance.getString("text");
         }
+
+        public int getSeconds() {
+            return seconds;
+        }
+
+        public void setSeconds(int seconds) {
+            this.seconds = seconds;
+        }
+
+        public String getDurationText() {
+            return durationText;
+        }
+
+        public void setDurationText(String durationText) {
+            this.durationText = durationText;
+        }
+
+        public int getMeters() {
+            return meters;
+        }
+
+        public void setMeters(int meters) {
+            this.meters = meters;
+        }
+
+        public String getDistanceText() {
+            return distanceText;
+        }
+
+        public void setDistanceText(String distanceText) {
+            this.distanceText = distanceText;
+        }
     }
 }

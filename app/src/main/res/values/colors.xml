@@ -11,4 +11,5 @@
     <color name="blue_semi_transparent_pressed">#80738ffe</color>
     <color name="brand_color">#4abc96</color>
     <color name="brand_color_light">#89D3BB</color>
+    <color name="danger_color">#f44336</color>
 </resources>
