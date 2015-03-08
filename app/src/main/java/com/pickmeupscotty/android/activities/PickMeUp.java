@@ -1,6 +1,7 @@
 package com.pickmeupscotty.android.activities;
 
 import android.app.DialogFragment;
+import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.view.View;
@@ -127,6 +128,8 @@ public class PickMeUp extends LocationAware implements ChooseDestinationDialogFr
                 Toast
                         .makeText(PickMeUp.this, "Sent pickup request", Toast.LENGTH_SHORT)
                         .show();
+                Intent intent = new Intent(PickMeUp.this, WaitForPickUp.class);
+                startActivity(intent);
             }
         });
     }
