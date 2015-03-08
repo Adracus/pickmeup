@@ -38,6 +38,7 @@
                 android:layout_margin="10dp">
 
                 <TextView
+                    android:layout_weight="1"
                     android:id="@+id/pick_up_request_from"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -46,6 +47,7 @@
                     android:textSize="32dp" />
 
                 <TextView
+                    android:layout_weight="1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/textView4"
@@ -57,14 +59,16 @@
                 <fragment xmlns:android="http://schemas.android.com/apk/res/android"
                     android:id="@+id/detourmap"
                     android:layout_width="match_parent"
-                    android:layout_height="400dp"
+                    android:layout_height="wrap_content"
                     android:name="com.google.android.gms.maps.MapFragment"
                     android:layout_alignParentLeft="true"
                     android:layout_marginLeft="0dp"
                     android:layout_alignParentTop="true"
-                    android:layout_marginTop="0dp" />
+                    android:layout_marginTop="0dp"
+                    android:layout_weight="10" />
 
                 <LinearLayout
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:layout_width="fill_parent"
                     android:layout_alignParentBottom="true">
