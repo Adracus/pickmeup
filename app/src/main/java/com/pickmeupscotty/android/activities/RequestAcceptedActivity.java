@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.pickmeupscotty.android.R;
 import com.pickmeupscotty.android.messages.PickUpResponse;
@@ -28,14 +29,20 @@ public class RequestAcceptedActivity extends Activity {
                 getResources().getString(R.string.request_accepted_eta_message),
                 response.getDriverName(),
                 response.getEta()));
-        List<LatLng> route = response.getRoute();
+        List<LatLng> positions = response.getPositions();
         MapFragment mMapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.routeMap);
         GoogleMap mMap = mMapFragment.getMap();
         mMap.setMyLocationEnabled(true);
-        PolylineOptions line = new PolylineOptions().addAll(route);
-        line.color(getResources().getColor(R.color.brand_color));
         mMap.clear();
-        mMap.addPolyline(line);
+        mMap.addMarker(new MarkerOptions()
+                .position(positions.get(0))
+                .draggable(true));
+        mMap.addMarker(new MarkerOptions()
+                .position(positions.get(1))
+                .draggable(true));
+        mMap.addMarker(new MarkerOptions()
+                .position(positions.get(2))
+                .draggable(true));
     }
 
 

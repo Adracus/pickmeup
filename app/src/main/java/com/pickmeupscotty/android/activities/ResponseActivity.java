@@ -27,6 +27,7 @@ import com.pickmeupscotty.android.maps.LocationAware;
 import com.pickmeupscotty.android.messages.PickUpRequest;
 import com.pickmeupscotty.android.messages.PickUpResponse;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -112,11 +113,18 @@ public class ResponseActivity extends LocationAware {
         FBWrapper.INSTANCE.getMyUser(new Request.GraphUserCallback() {
             @Override
             public void onCompleted(GraphUser graphUser, Response response) {
+                ArrayList<LatLng> positions = new ArrayList<LatLng>();
+                positions.add(new LatLng(mLastLocation.getLatitude(),
+                                mLastLocation.getLongitude()));
+                positions.add(new LatLng(request.getCurrentLatitude(),
+                                request.getCurrentLongitude()));
+                positions.add(new LatLng(request.getDestinationLatitude(),
+                                request.getDestinationLongitude()));
                 PickUpResponse pickUpResponse = new PickUpResponse(
                         graphUser.getId(),
                         graphUser.getName(),
                         distance.getDurationText(),
-                        decodedPath);
+                        positions);
                 RabbitService.send(pickUpResponse, request.getFacebookId());
 
                 Intent intent = new Intent(ResponseActivity.this, DriverActivity.class);

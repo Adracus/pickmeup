@@ -13,13 +13,13 @@ public class PickUpResponse implements Message, Parcelable {
     private String driverFacebookId;
     private String driverName;
     private String eta;
-    private List<LatLng> route;
+    private List<LatLng> positions;
 
-    public PickUpResponse(String driverFacebookId, String driverName, String eta, List<LatLng> route) {
+    public PickUpResponse(String driverFacebookId, String driverName, String eta, List<LatLng> positions) {
         this.driverFacebookId = driverFacebookId;
         this.driverName = driverName;
         this.eta = eta;
-        this.route = route;
+        this.positions = positions;
     }
 
     public PickUpResponse() {}
@@ -48,19 +48,19 @@ public class PickUpResponse implements Message, Parcelable {
         this.eta = eta;
     }
 
-    public List<LatLng> getRoute() {
-        return route;
+    public List<LatLng> getPositions() {
+        return positions;
     }
 
-    public void setRoute(List<LatLng> route) {
-        this.route = route;
+    public void setPositions(List<LatLng> route) {
+        this.positions = route;
     }
 
     protected PickUpResponse(Parcel in) {
         driverFacebookId = in.readString();
         driverName = in.readString();
         eta = in.readString();
-        route = in.readArrayList(LatLng.class.getClassLoader());
+        positions = in.readArrayList(LatLng.class.getClassLoader());
     }
 
     @Override
@@ -73,7 +73,7 @@ public class PickUpResponse implements Message, Parcelable {
         dest.writeString(driverFacebookId);
         dest.writeString(driverName);
         dest.writeString(eta);
-        dest.writeList(route);
+        dest.writeList(positions);
     }
 
     @SuppressWarnings("unused")

@@ -1,6 +1,8 @@
 package com.pickmeupscotty.android.amqp;
 
 
+import android.util.Log;
+
 import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.model.GraphUser;
@@ -112,6 +114,7 @@ public class MessageProcessor extends IConnectToRabbitMQ {
 
                                 Class<Message> clazz = (Class<Message>) Class.forName(mLastType);
                                 ObjectMapper mapper = new ObjectMapper();
+                                Log.i("TEST", new String(mLastMessage));
                                 Message message = mapper.readValue(mLastMessage, clazz);
                                 RabbitService.getInstance().notifySubscribers(message);
                             }
