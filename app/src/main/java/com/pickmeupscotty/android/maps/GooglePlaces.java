@@ -21,9 +21,9 @@ import java.util.List;
 public class GooglePlaces {
     private static final String LOG_TAG = GooglePlaces.class.getName();
     private static final String PLACES_API_BASE = "https://maps.googleapis.com/maps/api/place";
+    private static final String DISTANCEMATRIX_API_BASE = "https://maps.googleapis.com/maps/api/distancematrix";
     private static final String TYPE_AUTOCOMPLETE = "/autocomplete";
     private static final String TYPE_TEXTSEARCH = "/textsearch";
-    private static final String TYPE_DISTANCEMATRIX = "/distancematrix";
     private static final String OUT_JSON = "/json";
     private static final String browserKey = "AIzaSyDQC2EsFulKdRM01JsdD5o_oOo5xrm4BBQ";
 
@@ -84,14 +84,18 @@ public class GooglePlaces {
         Distance result = null;
 
         try {
-            StringBuilder sb = new StringBuilder(PLACES_API_BASE + TYPE_DISTANCEMATRIX + OUT_JSON);
+            StringBuilder sb = new StringBuilder(DISTANCEMATRIX_API_BASE + OUT_JSON);
             sb.append("?key=" + browserKey);
             sb.append("&origins=" + fromLatitude + "," + fromLongitude);
             sb.append("&destinations=" + toLatitude + "," + toLongitude);
             URL url = new URL(sb.toString());
 
             JSONObject jsonObj = doJsonRequest(url);
-            JSONObject elem = jsonObj.getJSONArray("rows").getJSONObject(0);
+            JSONArray rows = jsonObj.getJSONArray("rows");
+            JSONObject rowElement = rows.getJSONObject(0);
+            JSONArray elementRows = rowElement.getJSONArray("elements");
+            JSONObject elem = elementRows.getJSONObject(0);
+
             result = new Distance(elem);
 
 
@@ -122,7 +126,6 @@ public class GooglePlaces {
 
 
     private static JSONObject doJsonRequest(URL url) {
-        ArrayList<String> resultList = null;
         JSONObject jsonObj = null;
 
         HttpURLConnection conn = null;
