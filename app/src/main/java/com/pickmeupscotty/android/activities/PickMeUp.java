@@ -124,7 +124,7 @@ public class PickMeUp extends LocationAware implements ChooseDestinationDialogFr
                         place.getLatitude(),
                         place.getLongitude(),
                         fbid);
-                RabbitService.send(request, fbid);
+                RabbitService.send(request);
                 Toast
                         .makeText(PickMeUp.this, "Sent pickup request", Toast.LENGTH_SHORT)
                         .show();

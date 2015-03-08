@@ -10,14 +10,10 @@ import java.util.List;
 import java.util.Map;
 
 public class RabbitService {
-
-
     public static final String RABBIT_MQ_IP = "178.62.55.27";
-
-
-
-
     private static final RabbitService INSTANCE = new RabbitService();
+    private MessageProcessor mConsumer;
+    private Map<Class<?>, List<WeakReference<Subscriber<Message>>>> subscribers = new HashMap<>();
 
     public static RabbitService getInstance() {
         return INSTANCE;
@@ -33,7 +29,6 @@ public class RabbitService {
         getInstance().addSubscriber(requestType, sub);
     }
 
-
     public static void send(Message pickUpMessage) {
         getInstance().sendRequest(pickUpMessage);
     }
@@ -41,13 +36,6 @@ public class RabbitService {
     public static void send(Message message, String myFacebookID) {
         getInstance().sendRequest(message, myFacebookID);
     }
-
-    private MessageProcessor mConsumer;
-    private Map<Class<?>, List<WeakReference<Subscriber<Message>>>> subscribers = new HashMap<>();
-
-
-
-
 
     private <T extends Message> void addSubscriber(Class<T> requestType, Subscriber<T> sub) {
         List<WeakReference<Subscriber<Message>>> list = subscribers.get(requestType);
@@ -76,15 +64,6 @@ public class RabbitService {
         }
     }
 
-    private abstract class SubscribeRunner implements Runnable {
-
-        protected Subscriber<Message> sub;
-
-        public SubscribeRunner(Subscriber<Message> sub) {
-            this.sub = sub;
-        }
-    }
-
     public void connect(final String facebookID) {
         mConsumer = new MessageProcessor(RABBIT_MQ_IP);
         mConsumer.connectToRabbitMQ(facebookID);
@@ -98,5 +77,13 @@ public class RabbitService {
     private boolean sendRequest(Message pickUpMessage) {
         mConsumer.send(pickUpMessage);
         return false;
+    }
+
+    private abstract class SubscribeRunner implements Runnable {
+        protected Subscriber<Message> sub;
+
+        public SubscribeRunner(Subscriber<Message> sub) {
+            this.sub = sub;
+        }
     }
 }
