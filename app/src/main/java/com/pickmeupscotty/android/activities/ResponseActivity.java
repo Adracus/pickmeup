@@ -1,16 +1,11 @@
 package com.pickmeupscotty.android.activities;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.facebook.Request;
 import com.facebook.Response;
@@ -22,9 +17,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.pickmeupscotty.android.R;
 import com.pickmeupscotty.android.amqp.RabbitService;
@@ -36,8 +29,6 @@ import com.pickmeupscotty.android.messages.PickUpResponse;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-
-import javax.xml.datatype.Duration;
 
 public class ResponseActivity extends LocationAware {
     private MapFragment mMapFragment;
@@ -124,7 +115,8 @@ public class ResponseActivity extends LocationAware {
                 PickUpResponse pickUpResponse = new PickUpResponse(
                         graphUser.getId(),
                         graphUser.getName(),
-                        distance.getDurationText());
+                        distance.getDurationText(),
+                        decodedPath);
                 RabbitService.send(pickUpResponse, request.getFacebookId());
 
                 Intent intent = new Intent(ResponseActivity.this, DriverActivity.class);

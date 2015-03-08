@@ -24,5 +24,5 @@
     <string name="waiting_pickup_response">Your friends have been asked - now it\'s time to wait…</string>
     <string name="pick_up_request_from">Pick up request from <i>%1$s</i> received!</string>
     <string name="title_activity_request_accepted">Pick Up Accepted</string>
-    <string name="request_accepted_eta_message">%1$s has accepted your request! It will take approximately %2$s until you are going to be picked up.</string>
+    <string name="request_accepted_eta_message"><i>%1$s</i> has accepted your request! It will take approximately %2$s until you are going to be picked up.</string>
 </resources>

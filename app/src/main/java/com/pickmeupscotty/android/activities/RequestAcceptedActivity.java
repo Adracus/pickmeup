@@ -6,8 +6,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.pickmeupscotty.android.R;
 import com.pickmeupscotty.android.messages.PickUpResponse;
+
+import java.util.List;
 
 public class RequestAcceptedActivity extends Activity {
     private PickUpResponse response;
@@ -22,6 +28,14 @@ public class RequestAcceptedActivity extends Activity {
                 getResources().getString(R.string.request_accepted_eta_message),
                 response.getDriverName(),
                 response.getEta()));
+        List<LatLng> route = response.getRoute();
+        MapFragment mMapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.routeMap);
+        GoogleMap mMap = mMapFragment.getMap();
+        mMap.setMyLocationEnabled(true);
+        PolylineOptions line = new PolylineOptions().addAll(route);
+        line.color(getResources().getColor(R.color.brand_color));
+        mMap.clear();
+        mMap.addPolyline(line);
     }
 
 
