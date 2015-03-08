@@ -52,14 +52,14 @@
                 android:layout_below="@+id/textView2"
                 android:layout_alignStart="@+id/textView2"
                 android:layout_alignParentBottom="true"
-                android:layout_alignEnd="@+id/pickup_button"
+                android:layout_alignEnd="@+id/driver_button"
                 android:textSize="24dp"
                 android:layout_margin="10dp" />
         </LinearLayout>
     </ScrollView>
 
     <com.getbase.floatingactionbutton.FloatingActionButton
-        android:id="@+id/pickup_button"
+        android:id="@+id/driver_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         fab:fab_icon="@drawable/search_glass"

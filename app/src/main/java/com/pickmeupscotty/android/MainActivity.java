@@ -7,29 +7,26 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
+import android.widget.Toast;
 
 import com.pickmeupscotty.android.activities.DriverActivity;
-
 import com.pickmeupscotty.android.activities.PickMeUpActivity;
 import com.pickmeupscotty.android.amqp.RabbitService;
-import com.pickmeupscotty.android.services.NotificationService;
 import com.pickmeupscotty.android.login.FBWrapper;
+import com.pickmeupscotty.android.services.NotificationService;
 
 
 public class MainActivity extends FragmentActivity {
     private static final String TAG = MainActivity.class.getName();
 
 //    private LoginFragment loginFragment;
+    private long backTriggeredAt = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
-
-        final Button drivingButton = (Button) findViewById(R.id.drivingButton);
-        final Button pickMeUpButton = (Button) findViewById(R.id.pickMeUpButton);
 
         RabbitService.create("facebookid");
         FBWrapper.INSTANCE.addFacebookLoginOpenedListener(new FBWrapper.FacebookLoginStateListener() {
@@ -92,6 +89,21 @@ public class MainActivity extends FragmentActivity {
     @Override
     protected void onPause() {
         super.onPause();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (backTriggeredAt + 2000 > System.currentTimeMillis()) {
+            Intent intent = new Intent(this, StartActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.putExtra("EXIT", true);
+
+            startActivity(intent);
+            return;
+        }
+
+        backTriggeredAt = System.currentTimeMillis();
+        Toast.makeText(this, "Press BACK once more to exit", Toast.LENGTH_SHORT).show();
     }
 
 }

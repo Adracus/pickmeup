@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.facebook.Session;
 import com.pickmeupscotty.android.activities.DriverActivity;
 import com.pickmeupscotty.android.activities.PickMeUpActivity;
 import com.pickmeupscotty.android.login.FBWrapper;
@@ -16,30 +17,39 @@ import com.pickmeupscotty.android.login.FBWrapper;
 public class StartActivity extends FragmentActivity {
     private static final String TAG = StartActivity.class.getName();
 
+    private FBWrapper.FacebookLoginStateListener loginListener = new FBWrapper.FacebookLoginStateListener() {
+        @Override
+        public void onStateChanged() {
+            goToMainActivity();
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        if (getIntent().getBooleanExtra("EXIT", false)) {
+            finish();
+            return;
+        }
+
         setContentView(R.layout.activity_start);
 
-        registerFacebookStateChangeListener();
+        forwardOrRegister();
     }
 
-    private void registerFacebookStateChangeListener() {
-        FBWrapper.INSTANCE.addFacebookLoginOpenedListener(new FBWrapper.FacebookLoginStateListener() {
-            @Override
-            public void onStateChanged() {
-                //Forward to MainActivity
-                FBWrapper.INSTANCE.getUserId(new FBWrapper.UserIdCallback() {
-                    @Override
-                    public void onCompleted(String fbid) {
-                        Log.i("FBID", fbid);
-                    }
-                });
-                Intent intent = new Intent(StartActivity.this, MainActivity.class);
-                startActivity(intent);
-            }
-        });
+    private void goToMainActivity() {
+        Intent intent = new Intent(StartActivity.this, MainActivity.class);
+        startActivity(intent);
+    }
+
+    private void forwardOrRegister() {
+        if (Session.getActiveSession().isOpened()) {
+            goToMainActivity();
+            return;
+        }
+
+        FBWrapper.INSTANCE.addFacebookLoginOpenedListener(loginListener);
     }
 
     @Override
@@ -78,12 +88,14 @@ public class StartActivity extends FragmentActivity {
     protected void onResume() {
         super.onResume();
 
-        registerFacebookStateChangeListener();
+        forwardOrRegister();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+
+        FBWrapper.INSTANCE.removeFacebookLoginOpenedListener(loginListener);
     }
 
 }

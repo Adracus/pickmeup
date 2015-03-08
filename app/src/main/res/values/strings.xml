@@ -13,5 +13,9 @@
     <string name="title_activity_response">ResponseActivity</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="launcher_label">PickMeUp</string>
+
     <string name="title_activity_wait_for_pick_up">WaitForPickUp</string>
+
+    <string name="driver_button">I\'m driving!</string>
+    <string name="pickmeup_button">Pick me up!</string>
 </resources>

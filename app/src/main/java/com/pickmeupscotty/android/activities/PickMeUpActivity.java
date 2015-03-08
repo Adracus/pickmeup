@@ -40,7 +40,7 @@ public class PickMeUpActivity extends LocationAware implements ChooseDestination
         mMap = mMapFragment.getMap();
         mMap.setMyLocationEnabled(true);
 
-        fab = (FloatingActionButton) findViewById(R.id.pickup_button);
+        fab = (FloatingActionButton) findViewById(R.id.driver_button);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
