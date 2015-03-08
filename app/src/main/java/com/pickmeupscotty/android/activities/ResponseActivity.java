@@ -1,9 +1,12 @@
 package com.pickmeupscotty.android.activities;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.widget.TextView;
@@ -27,6 +30,7 @@ import com.pickmeupscotty.android.maps.GooglePlaces;
 import com.pickmeupscotty.android.maps.LocationAware;
 import com.pickmeupscotty.android.messages.PickUpRequest;
 import com.pickmeupscotty.android.messages.PickUpResponse;
+import com.pickmeupscotty.android.services.SendService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -131,12 +135,51 @@ public class ResponseActivity extends LocationAware {
                         request.getDestinationLongitude(),
                         mLastLocation.getLatitude(),
                         mLastLocation.getLongitude());
-                RabbitService.send(pickUpResponse, request.getFacebookId());
 
-                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("google.navigation:q="+ request.getCurrentLatitude() +"," + request.getCurrentLongitude()));
+                Intent intent = new Intent(ResponseActivity.this, SendService.class);
+                intent.putExtra(PickUpResponse.PICK_UP_RESPONSE, pickUpResponse);
+                intent.putExtra(PickUpRequest.FACEBOOK_ID, request.getFacebookId());
+                startService(intent);
+//                try {
+//                    Thread.sleep(1000);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+                AlertDialog.Builder builder = new AlertDialog.Builder(ResponseActivity.this);
+                // Get the layout inflater
+
+                // Inflate and set the layout for the dialog
+                // Pass null as the parent view because its going in the dialog layout
+                builder
+                        // Add action buttons
+                        .setPositiveButton("Pick me up!", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int id) {
+                                String query = textView.getText().toString();
+                                AsyncTask<String, Void, List<GooglePlaces.Place>> task = GooglePlaces.placesForAsync(query);
+                                try {
+                                    List<GooglePlaces.Place> places = task.get();
+                                    mListener.onDialogPositiveClick(places);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                } catch (ExecutionException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                ChooseDestinationDialogFragment.this.getDialog().cancel();
+                                ChooseDestinationDialogFragment.this.mListener.onDialogNegativeClick(ChooseDestinationDialogFragment.this);
+                            }
+                        });
+                Dialog dialog = builder.create();
+                DialogB
+                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("google.navigation:q=" + request.getCurrentLatitude() + "," + request.getCurrentLongitude()));
                 startActivity(i);
-//                Intent intent = new Intent(ResponseActivity.this, DriverActivity.class);
-//                startActivity(intent);
+//                Intent intent2 = new Intent(ResponseActivity.this, DriverActivity.class);
+//                intent2.putExtra(PickUpRequest.PICK_UP_REQUEST, request);
+//                startActivity(intent2);
             }
         });
     }

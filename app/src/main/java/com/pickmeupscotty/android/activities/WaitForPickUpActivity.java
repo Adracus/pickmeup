@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -21,8 +22,10 @@ public class WaitForPickUpActivity extends Activity {
         setContentView(R.layout.activity_wait_for_pick_up);
 
         RabbitService.subscribe(PickUpResponse.class, new Subscriber<PickUpResponse>() {
+
             @Override
             public void on(PickUpResponse response) {
+
                 Intent intent = new Intent(WaitForPickUpActivity.this, RequestAcceptedActivity.class);
                 intent.putExtra(PickUpResponse.PICK_UP_RESPONSE, response);
                 startActivity(intent);

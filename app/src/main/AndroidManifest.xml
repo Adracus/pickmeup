@@ -80,6 +80,8 @@
             android:name=".services.NotificationService"
             android:exported="false" />
 
+        <service android:name=".services.SendService" />
+
         <receiver android:name=".services.BootUpService"
             android:enabled="true">
             <intent-filter>
