@@ -1,16 +1,13 @@
 package com.pickmeupscotty.android.services;
 
-import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
-import android.widget.Toast;
-
-import com.facebook.Session;
 import com.pickmeupscotty.android.R;
 import com.pickmeupscotty.android.activities.ResponseActivity;
 import com.pickmeupscotty.android.amqp.RabbitService;
@@ -21,18 +18,28 @@ import com.pickmeupscotty.android.messages.PickUpRequest;
 /**
  * Created by jannis on 07/03/15.
  */
-public class NotificationService extends IntentService {
+public class NotificationService extends Service {
 
     /**
      * Creates an IntentService.  Invoked by your subclass's constructor.
      *
      */
     public NotificationService() {
-        super("NotificationService");
     }
 
     @Override
-    protected void onHandleIntent(Intent intent) {
+    public IBinder onBind(Intent intent) {
+        return null;
+    }
+
+    @Override
+    public void onCreate() {
+
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        //TODO do something useful
 
         RabbitService.subscribe(PickUpRequest.class, new Subscriber<PickUpRequest>() {
             @Override
@@ -44,10 +51,8 @@ public class NotificationService extends IntentService {
                 FBWrapper.INSTANCE.getUserId(new FBWrapper.UserIdCallback() {
                     @Override
                     public void onCompleted(String fbid) {
-                        Log.e("service", fbid);
                         //Do not show request send by oneself
                         if (!req.getFacebookId().equals(fbid)) {
-                            Log.e("service2", request.getFacebookId());
                             Intent notificationIntent = new Intent(context, ResponseActivity.class);
                             notificationIntent.putExtra(PickUpRequest.PICK_UP_REQUEST, req);
                             notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -70,9 +75,6 @@ public class NotificationService extends IntentService {
                 });
             }
         });
-
-        while (true) {
-            Thread.yield();
-        }
+        return Service.START_NOT_STICKY;
     }
 }

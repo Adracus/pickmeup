@@ -1,7 +1,11 @@
 package com.pickmeupscotty.android;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -12,6 +16,9 @@ import com.facebook.Session;
 import com.pickmeupscotty.android.activities.DriverActivity;
 import com.pickmeupscotty.android.activities.PickMeUpActivity;
 import com.pickmeupscotty.android.login.FBWrapper;
+import com.pickmeupscotty.android.services.NotificationService;
+
+import java.util.Calendar;
 
 
 public class StartActivity extends FragmentActivity {
@@ -38,9 +45,22 @@ public class StartActivity extends FragmentActivity {
         forwardOrRegister();
     }
 
+    public class AlarmReceiver {
+        
+    }
+
+
     private void goToMainActivity() {
-        Intent intent = new Intent(StartActivity.this, MainActivity.class);
-        startActivity(intent);
+        Calendar cal = Calendar.getInstance();
+
+        Intent intent = new Intent(this, NotificationService.class);
+        PendingIntent pintent = PendingIntent.getService(this, 0, intent, 0);
+
+        AlarmManager alarm = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        alarm.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), 3*1000, pintent);
+
+        Intent intent1 = new Intent(StartActivity.this, MainActivity.class);
+        startActivity(intent1);
     }
 
     private void forwardOrRegister() {

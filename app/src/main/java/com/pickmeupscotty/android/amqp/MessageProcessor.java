@@ -1,6 +1,5 @@
 package com.pickmeupscotty.android.amqp;
 
-import android.util.Log;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -10,6 +9,7 @@ import com.rabbitmq.client.QueueingConsumer;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Consumes messages from a RabbitMQ broker
@@ -41,12 +41,13 @@ public class MessageProcessor extends IConnectToRabbitMQ {
                 if (MessageProcessor.super.connectToRabbitMQ()) {
 
                     try {
-                        mQueue = mModel.queueDeclare().getQueue();
+                        Map<String, Object> args = new HashMap<String, Object>();
+                        args.put("x-expires", 600000);
+                        mQueue = mModel.queueDeclare(facebookID, true, false, false, args).getQueue();
                         mModel.exchangeDeclare(facebookID, "fanout");
                         mModel.queueBind(mQueue, facebookID, "");
                         MySubscription = new QueueingConsumer(mModel);
                         mModel.basicConsume(mQueue, false, MySubscription);
-                        Log.e("queue:", facebookID);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
