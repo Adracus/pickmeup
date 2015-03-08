@@ -2,6 +2,7 @@ package com.pickmeupscotty.android.activities;
 
 import android.content.Intent;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
@@ -115,11 +116,11 @@ public class ResponseActivity extends LocationAware {
             public void onCompleted(GraphUser graphUser, Response response) {
                 ArrayList<LatLng> positions = new ArrayList<LatLng>();
                 positions.add(new LatLng(mLastLocation.getLatitude(),
-                                mLastLocation.getLongitude()));
+                        mLastLocation.getLongitude()));
                 positions.add(new LatLng(request.getCurrentLatitude(),
-                                request.getCurrentLongitude()));
+                        request.getCurrentLongitude()));
                 positions.add(new LatLng(request.getDestinationLatitude(),
-                                request.getDestinationLongitude()));
+                        request.getDestinationLongitude()));
                 PickUpResponse pickUpResponse = new PickUpResponse(
                         graphUser.getId(),
                         graphUser.getName(),
@@ -132,8 +133,10 @@ public class ResponseActivity extends LocationAware {
                         mLastLocation.getLongitude());
                 RabbitService.send(pickUpResponse, request.getFacebookId());
 
-                Intent intent = new Intent(ResponseActivity.this, DriverActivity.class);
-                startActivity(intent);
+                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("google.navigation:q="+ request.getCurrentLatitude() +"," + request.getCurrentLongitude()));
+                startActivity(i);
+//                Intent intent = new Intent(ResponseActivity.this, DriverActivity.class);
+//                startActivity(intent);
             }
         });
     }
