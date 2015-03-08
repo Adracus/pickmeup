@@ -23,7 +23,6 @@ public class WaitForPickUpActivity extends Activity {
         RabbitService.subscribe(PickUpResponse.class, new Subscriber<PickUpResponse>() {
             @Override
             public void on(PickUpResponse response) {
-                Toast.makeText(WaitForPickUpActivity.this, "You have been accepted!", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(WaitForPickUpActivity.this, RequestAcceptedActivity.class);
                 intent.putExtra(PickUpResponse.PICK_UP_RESPONSE, response);
                 startActivity(intent);

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:orientation="vertical">
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/routeMap"
+        android:id="@+id/map"
         android:layout_width="match_parent"
         android:layout_height="300dp"
         android:name="com.google.android.gms.maps.MapFragment"
@@ -36,8 +36,8 @@
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:text="@string/title_activity_request_accepted"
-                    android:id="@+id/pickUpAcceptedTextView"
-                    android:layout_below="@+id/map"
+                    android:id="@+id/pickUpRequestAcceptedTextView"
+                    android:layout_below="@+id/routeMap"
                     android:layout_alignParentStart="true"
                     android:layout_margin="10dp"
                     android:textSize="32dp"
@@ -47,22 +47,23 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=""
                 android:id="@+id/etaMessageTextView"
-                android:layout_below="@+id/pickUpAcceptedTextView"
-                android:layout_alignStart="@+id/pickUpAcceptedTextView"
+                android:layout_below="@+id/pickUpRequestAcceptedTextView"
+                android:layout_alignStart="@+id/pickUpRequestAcceptedTextView"
                 android:layout_alignParentBottom="true"
-                android:layout_alignEnd="@+id/driver_button"
+                android:layout_alignEnd="@+id/misterMustacheButton"
                 android:textSize="24dp"
                 android:layout_margin="10dp" />
         </LinearLayout>
     </ScrollView>
 
     <com.getbase.floatingactionbutton.FloatingActionButton
+        android:id="@+id/misterMustacheButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         fab:fab_icon="@drawable/mister_mustache"
         fab:fab_colorNormal="@color/brand_color"
+        fab:fab_colorPressed="@color/brand_color_light"
         android:layout_alignParentRight="true"
         android:layout_alignBottom="@+id/map"
         android:layout_marginBottom="-32dp"
