@@ -38,11 +38,7 @@ public class NotificationService extends IntentService {
                 // berechne ob notification angezeigt werden soll.
 
                 Intent notificationIntent = new Intent(context, ResponseActivity.class);
-                notificationIntent.putExtra(PickUpRequest.FACEBOOK_ID, request.getFacebookId());
-                notificationIntent.putExtra(PickUpRequest.CURRENT_LATITUDE, request.getCurrentLatitude());
-                notificationIntent.putExtra(PickUpRequest.CURRENT_LONGITUDE, request.getCurrentLongitude());
-                notificationIntent.putExtra(PickUpRequest.DESTINATION_LATITUDE, request.getDestinationLatitude());
-                notificationIntent.putExtra(PickUpRequest.DESTINATION_LONGITUDE, request.getDestinationLongitude());
+                notificationIntent.putExtra(PickUpRequest.PICK_UP_REQUEST, request);
 
                 PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
 

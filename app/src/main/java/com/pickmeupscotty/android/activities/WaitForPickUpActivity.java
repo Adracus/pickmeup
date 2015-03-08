@@ -12,7 +12,7 @@ import com.pickmeupscotty.android.amqp.RabbitService;
 import com.pickmeupscotty.android.amqp.Subscriber;
 import com.pickmeupscotty.android.messages.PickUpResponse;
 
-public class WaitForPickUp extends Activity {
+public class WaitForPickUpActivity extends Activity {
     ProgressDialog progress;
 
     @Override
@@ -29,7 +29,7 @@ public class WaitForPickUp extends Activity {
             @Override
             public void on(PickUpResponse response) {
                 progress.hide();
-                Toast.makeText(WaitForPickUp.this, "You have been accepted!", Toast.LENGTH_LONG).show();
+                Toast.makeText(WaitForPickUpActivity.this, "You have been accepted!", Toast.LENGTH_LONG).show();
             }
         });
     }

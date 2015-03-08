@@ -7,17 +7,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 
-import com.facebook.Session;
 import com.pickmeupscotty.android.activities.DriverActivity;
-import com.pickmeupscotty.android.activities.PickMeUp;
-import com.pickmeupscotty.android.amqp.RabbitService;
+import com.pickmeupscotty.android.activities.PickMeUpActivity;
 import com.pickmeupscotty.android.login.FBWrapper;
-import com.pickmeupscotty.android.login.LoginFragment;
-import com.pickmeupscotty.android.services.NotificationService;
-
-import java.util.ArrayList;
 
 
 public class StartActivity extends FragmentActivity {
@@ -77,7 +70,7 @@ public class StartActivity extends FragmentActivity {
     }
 
     public void startPickMeUpActivity(View view) {
-        Intent intent = new Intent(this, PickMeUp.class);
+        Intent intent = new Intent(this, PickMeUpActivity.class);
         startActivity(intent);
     }
 

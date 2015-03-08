@@ -25,43 +25,35 @@ public class ResponseActivity extends Activity {
     private MapFragment mMapFragment;
     private GoogleMap mMap;
     private boolean movedMap;
-    private String facebookId;
-    private double destinationLatitude;
-    private double destinationLongitude;
-    private double currentLatitude;
-    private double currentLongitude;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_response);
-//        facebookId = getIntent().getStringExtra("FACEBOOK_ID");
-//        destinationLatitude = getIntent().getDoubleExtra(PickUpRequest.DESTINATION_LATITUDE, 0.0);
-//        destinationLongitude = getIntent().getDoubleExtra(PickUpRequest.DESTINATION_LONGITUDE, 0.0);
-//        currentLatitude = getIntent().getDoubleExtra(PickUpRequest.CURRENT_LATITUDE, 0.0);
-//        currentLongitude = getIntent().getDoubleExtra(PickUpRequest.CURRENT_LONGITUDE, 0.0);
-        facebookId = "Test";
-        destinationLatitude = 49.021965;
-        destinationLongitude = 8.3703167;
-        currentLatitude = 49.01312;
-        currentLongitude = 8.424298;
+
+        PickUpRequest request = savedInstanceState.getParcelable(PickUpRequest.PICK_UP_REQUEST);
 
         TextView nameView = (TextView) findViewById(R.id.textView4);
-        nameView.setText(facebookId);
+        nameView.setText(request.getFacebookId());
 
         mMapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.detourmap);
         mMap = mMapFragment.getMap();
         mMap.setMyLocationEnabled(true);
 
-        LatLng destinationPosition = new LatLng(destinationLatitude, destinationLongitude);
-        LatLng currentPosition = new LatLng(currentLatitude, currentLongitude);
+        LatLng destinationPosition = new LatLng(
+                request.getDestinationLatitude(),
+                request.getDestinationLongitude());
+        LatLng currentPosition = new LatLng(
+                request.getCurrentLatitude(),
+                request.getCurrentLongitude());
 
         Marker home = mMap.addMarker(new MarkerOptions()
                 .position(destinationPosition)
+                .title("Destination")
                 .draggable(true));
 
         Marker work = mMap.addMarker(new MarkerOptions()
                 .position(currentPosition)
+                .title("Current")
                 .draggable(true));
 
         LatLngBounds.Builder bounds = new LatLngBounds.Builder();

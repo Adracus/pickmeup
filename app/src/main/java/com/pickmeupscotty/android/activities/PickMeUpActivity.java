@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
-import com.getbase.floatingactionbutton.AddFloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.maps.CameraUpdate;
@@ -28,7 +27,7 @@ import com.pickmeupscotty.android.messages.PickUpResponse;
 
 import java.util.List;
 
-public class PickMeUp extends LocationAware implements ChooseDestinationDialogFragment.ChooseDestinationDialogListener, ChoosePlaceDialogFragment.ChoosePlaceListener {
+public class PickMeUpActivity extends LocationAware implements ChooseDestinationDialogFragment.ChooseDestinationDialogListener, ChoosePlaceDialogFragment.ChoosePlaceListener {
     private MapFragment mMapFragment;
     private GoogleMap mMap;
     private FloatingActionButton fab;
@@ -126,9 +125,9 @@ public class PickMeUp extends LocationAware implements ChooseDestinationDialogFr
                         fbid);
                 RabbitService.send(request);
                 Toast
-                        .makeText(PickMeUp.this, "Sent pickup request", Toast.LENGTH_SHORT)
+                        .makeText(PickMeUpActivity.this, "Sent pickup request", Toast.LENGTH_SHORT)
                         .show();
-                Intent intent = new Intent(PickMeUp.this, WaitForPickUp.class);
+                Intent intent = new Intent(PickMeUpActivity.this, WaitForPickUpActivity.class);
                 startActivity(intent);
             }
         });

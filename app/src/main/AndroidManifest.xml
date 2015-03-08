@@ -47,7 +47,7 @@
             android:label="@string/app_name"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
-            android:name=".activities.PickMeUp"
+            android:name=".activities.PickMeUpActivity"
             android:exported="true"
             android:label="@string/title_activity_pick_me_up" >
         </activity>
@@ -80,12 +80,12 @@
             android:exported="false" />
 
         <activity
-            android:name=".activities.WaitForPickUp"
+            android:name=".activities.WaitForPickUpActivity"
             android:label="@string/title_activity_wait_for_pick_up"
-            android:parentActivityName=".activities.PickMeUp" >
+            android:parentActivityName=".activities.PickMeUpActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.pickmeupscotty.android.activities.PickMeUp" />
+                android:value=".activities.PickMeUpActivity" />
         </activity>
     </application>
 

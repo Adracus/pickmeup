@@ -11,6 +11,7 @@ public class PickUpRequest implements Message, Parcelable {
     public static String DESTINATION_LATITUDE = "DESTINATION_LATITUDE";
     public static String DESTINATION_LONGITUDE = "DESTINATION_LONGITUDE";
     public static String FACEBOOK_ID = "FACEBOOK_ID";
+    public static String PICK_UP_REQUEST = "PICKUP_REQUEST";
 
     private double currentLatitude;
     private double currentLongitude;

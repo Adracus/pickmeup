@@ -1,9 +1,7 @@
 package com.pickmeupscotty.android;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -11,13 +9,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
-import com.facebook.Session;
-import com.facebook.SessionState;
 import com.pickmeupscotty.android.activities.DriverActivity;
 
-import com.pickmeupscotty.android.activities.PickMeUp;
+import com.pickmeupscotty.android.activities.PickMeUpActivity;
 import com.pickmeupscotty.android.amqp.RabbitService;
-import com.pickmeupscotty.android.login.LoginFragment;
 import com.pickmeupscotty.android.services.NotificationService;
 import com.pickmeupscotty.android.login.FBWrapper;
 
@@ -85,7 +80,7 @@ public class MainActivity extends FragmentActivity {
     }
 
     public void startPickMeUpActivity(View view) {
-        Intent intent = new Intent(this, PickMeUp.class);
+        Intent intent = new Intent(this, PickMeUpActivity.class);
         startActivity(intent);
     }
 
