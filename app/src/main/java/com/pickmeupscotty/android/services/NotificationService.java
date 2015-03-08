@@ -38,31 +38,31 @@ public class NotificationService extends IntentService {
             public void on(PickUpRequest request) {
                 final PickUpRequest req = request;
 
-                Context context = getApplicationContext();
+                final Context context = getApplicationContext();
 
                 FBWrapper.INSTANCE.getUserId(new FBWrapper.UserIdCallback() {
                     @Override
                     public void onCompleted(String fbid) {
                         //Do not show request send by oneself
-                        if (req.getFacebookId() == fbid) return;
+                        if (!req.getFacebookId().equals(fbid)) {
+                            Intent notificationIntent = new Intent(context, ResponseActivity.class);
+                            notificationIntent.putExtra(PickUpRequest.PICK_UP_REQUEST, req);
+                            notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
-                        Intent notificationIntent = new Intent(context, ResponseActivity.class);
-                        notificationIntent.putExtra(PickUpRequest.PICK_UP_REQUEST, request);
-                        notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                            PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-                        PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                            NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context)
+                                    .setContentTitle("Pick Up Request")
+                                    .setContentText("by " + req.getFacebookName())
+                                    .setSmallIcon(R.drawable.mister_mustache);
+                            notificationBuilder = notificationBuilder.setContentIntent(contentIntent);
+                            Notification notification = notificationBuilder.build();
+                            notification.flags = Notification.DEFAULT_LIGHTS | Notification.FLAG_AUTO_CANCEL;
 
-                        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context)
-                                .setContentTitle("Pick Up Request")
-                                .setContentText("by " + request.getFacebookName())
-                                .setSmallIcon(R.drawable.mister_mustache);
-                        notificationBuilder = notificationBuilder.setContentIntent(contentIntent);
-                        Notification notification = notificationBuilder.build();
-                        notification.flags = Notification.DEFAULT_LIGHTS | Notification.FLAG_AUTO_CANCEL;
-
-                        NotificationManager mNotificationManager =
-                                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                        mNotificationManager.notify(12, notification);
+                            NotificationManager mNotificationManager =
+                                    (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                            mNotificationManager.notify(12, notification);
+                        }
                     }
                 });
             }
