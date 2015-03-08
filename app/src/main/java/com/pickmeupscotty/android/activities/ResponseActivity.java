@@ -124,7 +124,12 @@ public class ResponseActivity extends LocationAware {
                         graphUser.getId(),
                         graphUser.getName(),
                         distance.getDurationText(),
-                        positions);
+                        request.getCurrentLatitude(),
+                        request.getCurrentLongitude(),
+                        request.getDestinationLatitude(),
+                        request.getDestinationLongitude(),
+                        mLastLocation.getLatitude(),
+                        mLastLocation.getLongitude());
                 RabbitService.send(pickUpResponse, request.getFacebookId());
 
                 Intent intent = new Intent(ResponseActivity.this, DriverActivity.class);
