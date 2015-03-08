@@ -51,8 +51,9 @@ public class ResponseActivity extends LocationAware {
         setContentView(R.layout.activity_response);
 
         request = getIntent().getParcelableExtra(PickUpRequest.PICK_UP_REQUEST);
-        TextView nameView = (TextView) findViewById(R.id.textView4);
-        nameView.setText(request.getFacebookName());
+        TextView nameView = (TextView) findViewById(R.id.pick_up_request_from);
+        String text = getResources().getString(R.string.pick_up_request_from, request.getFacebookName());
+        nameView.setText(text);
 
         mMapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.detourmap);
         mMap = mMapFragment.getMap();
