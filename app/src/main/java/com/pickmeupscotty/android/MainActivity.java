@@ -19,7 +19,7 @@ import com.pickmeupscotty.android.services.NotificationService;
 public class MainActivity extends FragmentActivity {
     private static final String TAG = MainActivity.class.getName();
 
-//    private LoginFragment loginFragment;
+    //    private LoginFragment loginFragment;
     private long backTriggeredAt = 0;
 
     @Override
@@ -38,7 +38,7 @@ public class MainActivity extends FragmentActivity {
                                                      Log.e("test", fbid);
                                                      RabbitService.create(fbid);
                                                  }
-                   }
+                                             }
 
                 );
             }

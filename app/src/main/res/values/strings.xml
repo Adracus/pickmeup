@@ -16,6 +16,7 @@
 
     <string name="title_activity_wait_for_pick_up">WaitForPickUp</string>
 
-    <string name="driver_button">I\'m driving!</string>
-    <string name="pickmeup_button">Pick me up!</string>
+    <string name="driver_button">I\'M DRIVING!</string>
+    <string name="pickmeup_button">PICK ME UP!</string>
+    <string name="select_mode">SELECT MODE:</string>
 </resources>

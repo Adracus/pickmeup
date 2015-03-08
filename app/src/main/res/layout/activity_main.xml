@@ -9,10 +9,11 @@
     <ImageView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_centerInParent="true"
         android:scaleType="centerCrop"
         android:src="@drawable/tramperin"
-        android:id="@+id/background_image" />
+        android:id="@+id/background_image"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
 
     <Button
         android:layout_width="fill_parent"
@@ -41,11 +42,29 @@
         android:background="@color/brand_color"
         android:layout_alignParentBottom="false"
         android:layout_alignParentStart="false"
-        android:layout_alignTop="@+id/pickmeup_button"
         android:layout_marginTop="70dp"
         android:layout_marginLeft="60dp"
         android:onClick="startDriverActivity"
-        android:capitalize="characters" />
+        android:capitalize="characters"
+        android:layout_alignTop="@+id/pickmeup_button" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="60dp"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/select_mode"
+        android:id="@+id/textView5"
+        android:layout_centerVertical="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignBottom="@+id/pickmeup_button"
+        android:layout_marginBottom="70dp"
+        android:layout_marginLeft="0dp"
+        android:background="#ff615f60"
+        android:textColor="@android:color/white"
+        android:textAlignment="center"
+        android:gravity="center_vertical|center_horizontal"
+        android:layout_marginRight="120dp"
+        android:textSize="13pt" />
 
 
 </RelativeLayout>
