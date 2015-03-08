@@ -18,15 +18,17 @@ public class PickUpRequest implements Message, Parcelable {
     private double destinationLatitude;
     private double destinationLongitude;
     private String facebookId;
+    private String facebookName;
 
     public PickUpRequest(double currentLatitude, double currentLongitude,
                          double destinationLatitude, double destinationLongitude,
-                         String facebookId) {
+                         String facebookId, String facebookName) {
         this.currentLatitude = currentLatitude;
         this.currentLongitude = currentLongitude;
         this.destinationLatitude = destinationLatitude;
         this.destinationLongitude = destinationLongitude;
         this.facebookId = facebookId;
+        this.facebookName = facebookName;
     }
 
     public PickUpRequest() {
@@ -78,6 +80,7 @@ public class PickUpRequest implements Message, Parcelable {
         destinationLatitude = in.readDouble();
         destinationLongitude = in.readDouble();
         facebookId = in.readString();
+        facebookName = in.readString();
     }
 
     @Override
@@ -92,6 +95,7 @@ public class PickUpRequest implements Message, Parcelable {
         dest.writeDouble(destinationLatitude);
         dest.writeDouble(destinationLongitude);
         dest.writeString(facebookId);
+        dest.writeString(facebookName);
     }
 
     @SuppressWarnings("unused")
@@ -106,4 +110,12 @@ public class PickUpRequest implements Message, Parcelable {
             return new PickUpRequest[size];
         }
     };
+
+    public String getFacebookName() {
+        return facebookName;
+    }
+
+    public void setFacebookName(String facebookName) {
+        this.facebookName = facebookName;
+    }
 }

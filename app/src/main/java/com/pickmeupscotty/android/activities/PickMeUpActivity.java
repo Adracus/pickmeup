@@ -7,6 +7,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
+import com.facebook.Request;
+import com.facebook.Response;
+import com.facebook.model.GraphUser;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.maps.CameraUpdate;
@@ -114,15 +117,16 @@ public class PickMeUpActivity extends LocationAware implements ChooseDestination
 
     @Override
     public void placeChosen(final GooglePlaces.Place place) {
-        FBWrapper.INSTANCE.getUserId(new FBWrapper.UserIdCallback() {
+        FBWrapper.INSTANCE.getMyUser(new Request.GraphUserCallback() {
             @Override
-            public void onCompleted(String fbid) {
+            public void onCompleted(GraphUser graphUser, Response response) {
                 PickUpRequest request = new PickUpRequest(
                         mLastLocation.getLatitude(),
                         mLastLocation.getLongitude(),
                         place.getLatitude(),
                         place.getLongitude(),
-                        fbid);
+                        graphUser.getId(),
+                        graphUser.getName());
                 RabbitService.send(request);
                 Toast
                         .makeText(PickMeUpActivity.this, "Sent pickup request", Toast.LENGTH_SHORT)
