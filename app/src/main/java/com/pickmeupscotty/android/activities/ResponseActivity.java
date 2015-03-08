@@ -31,7 +31,7 @@ public class ResponseActivity extends Activity {
 
         PickUpRequest request = getIntent().getParcelableExtra(PickUpRequest.PICK_UP_REQUEST);
         TextView nameView = (TextView) findViewById(R.id.textView4);
-        nameView.setText(request.getFacebookId());
+        nameView.setText(request.getFacebookName());
 
         mMapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.detourmap);
         mMap = mMapFragment.getMap();

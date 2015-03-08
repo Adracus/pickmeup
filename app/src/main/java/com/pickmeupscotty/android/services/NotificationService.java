@@ -45,8 +45,8 @@ public class NotificationService extends IntentService {
 
                 NotificationCompat.Builder notification = new NotificationCompat.Builder(context)
                         .setContentTitle("Pick Up Request")
-                        .setContentText("by " + request.getFacebookId())
-                        .setSmallIcon(R.drawable.notification);
+                        .setContentText("by " + request.getFacebookName())
+                        .setSmallIcon(R.drawable.mister_mustache);
                 notification = notification
                         .setContentIntent(contentIntent);
 
