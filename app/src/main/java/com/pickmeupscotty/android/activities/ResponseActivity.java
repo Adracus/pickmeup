@@ -17,9 +17,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.pickmeupscotty.android.R;
-import com.pickmeupscotty.android.amqp.RabbitService;
 import com.pickmeupscotty.android.messages.PickUpRequest;
-import com.pickmeupscotty.android.messages.PickUpResponse;
 
 public class ResponseActivity extends Activity {
     private MapFragment mMapFragment;
@@ -29,9 +27,9 @@ public class ResponseActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_response);
 
-        PickUpRequest request = savedInstanceState.getParcelable(PickUpRequest.PICK_UP_REQUEST);
-
+        PickUpRequest request = getIntent().getParcelableExtra(PickUpRequest.PICK_UP_REQUEST);
         TextView nameView = (TextView) findViewById(R.id.textView4);
         nameView.setText(request.getFacebookId());
 

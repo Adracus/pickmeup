@@ -39,10 +39,11 @@ public class NotificationService extends IntentService {
 
                 Intent notificationIntent = new Intent(context, ResponseActivity.class);
                 notificationIntent.putExtra(PickUpRequest.PICK_UP_REQUEST, request);
+                notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
-                PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
+                PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-                NotificationCompat.Builder notification = new NotificationCompat.Builder(getApplicationContext())
+                NotificationCompat.Builder notification = new NotificationCompat.Builder(context)
                         .setContentTitle("Pick Up Request")
                         .setContentText("by " + request.getFacebookId())
                         .setSmallIcon(R.drawable.notification);
