@@ -1,5 +1,7 @@
 package com.pickmeupscotty.android.amqp;
 
+import android.util.Log;
+
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -40,10 +42,11 @@ public class MessageProcessor extends IConnectToRabbitMQ {
 
                     try {
                         mQueue = mModel.queueDeclare().getQueue();
-                        MySubscription = new QueueingConsumer(mModel);
-                        mModel.basicConsume(mQueue, false, MySubscription);
                         mModel.exchangeDeclare(facebookID, "fanout");
                         mModel.queueBind(mQueue, facebookID, "");
+                        MySubscription = new QueueingConsumer(mModel);
+                        mModel.basicConsume(mQueue, false, MySubscription);
+                        Log.e("queue:", facebookID);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }

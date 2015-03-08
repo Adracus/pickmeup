@@ -7,6 +7,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.facebook.Session;
@@ -35,7 +36,7 @@ public class NotificationService extends IntentService {
 
         RabbitService.subscribe(PickUpRequest.class, new Subscriber<PickUpRequest>() {
             @Override
-            public void on(PickUpRequest request) {
+            public void on(final PickUpRequest request) {
                 final PickUpRequest req = request;
 
                 final Context context = getApplicationContext();
@@ -43,8 +44,10 @@ public class NotificationService extends IntentService {
                 FBWrapper.INSTANCE.getUserId(new FBWrapper.UserIdCallback() {
                     @Override
                     public void onCompleted(String fbid) {
+                        Log.e("service", fbid);
                         //Do not show request send by oneself
                         if (!req.getFacebookId().equals(fbid)) {
+                            Log.e("service2", request.getFacebookId());
                             Intent notificationIntent = new Intent(context, ResponseActivity.class);
                             notificationIntent.putExtra(PickUpRequest.PICK_UP_REQUEST, req);
                             notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);

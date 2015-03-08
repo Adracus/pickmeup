@@ -28,21 +28,13 @@ public class MainActivity extends FragmentActivity {
 
         setContentView(R.layout.activity_main);
 
-        RabbitService.create("facebookid");
-        FBWrapper.INSTANCE.addFacebookLoginOpenedListener(new FBWrapper.FacebookLoginStateListener() {
-            @Override
-            public void onStateChanged() {
                 FBWrapper.INSTANCE.getUserId(new FBWrapper.UserIdCallback() {
                                                  @Override
                                                  public void onCompleted(String fbid) {
-                                                     Log.e("test", fbid);
                                                      RabbitService.create(fbid);
                                                  }
                                              }
-
                 );
-            }
-        });
 
         Intent mServiceIntent = new Intent(this, NotificationService.class);
         startService(mServiceIntent);
