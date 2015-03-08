@@ -95,10 +95,6 @@ public class PickMeUpActivity extends LocationAware implements ChooseDestination
                     .show();
             return;
         }
-        if (1 == places.size()) {
-            placeChosen(places.get(0));
-            return;
-        }
         ChoosePlaceDialogFragment placeChooser = new ChoosePlaceDialogFragment();
         placeChooser.setPlaces(places);
         placeChooser.show(getFragmentManager(), "place_choose");

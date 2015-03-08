@@ -3,6 +3,9 @@ package com.pickmeupscotty.android.maps;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.google.android.gms.maps.model.LatLng;
+import com.google.maps.android.PolyUtil;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -22,10 +25,13 @@ public class GooglePlaces {
     private static final String LOG_TAG = GooglePlaces.class.getName();
     private static final String PLACES_API_BASE = "https://maps.googleapis.com/maps/api/place";
     private static final String DISTANCEMATRIX_API_BASE = "https://maps.googleapis.com/maps/api/distancematrix";
+    private static final String DIRECTIONS_API_BASE = "https://maps.googleapis.com/maps/api/directions";
     private static final String TYPE_AUTOCOMPLETE = "/autocomplete";
     private static final String TYPE_TEXTSEARCH = "/textsearch";
     private static final String OUT_JSON = "/json";
     private static final String browserKey = "AIzaSyDQC2EsFulKdRM01JsdD5o_oOo5xrm4BBQ";
+
+    private static List<LatLng> line;
 
     public static ArrayList<String> autocompleteResults(String input) {
         ArrayList<String> resultList = null;
@@ -106,6 +112,36 @@ public class GooglePlaces {
         }
 
         return result;
+    }
+
+    public static List<LatLng> directionsFor(LatLng myPosition, LatLng friendPosition, LatLng friendDestination) {
+        try {
+            StringBuilder sb = new StringBuilder(DIRECTIONS_API_BASE + OUT_JSON);
+            sb.append("?key=" + browserKey);
+            sb.append("&origin=" + myPosition.latitude + "," + myPosition.longitude);
+            sb.append("&destination=" + friendDestination.latitude + "," + friendDestination.longitude);
+            sb.append("&waypoints=" + friendPosition.latitude + "," + friendPosition.longitude);
+            URL url = new URL(sb.toString());
+
+            JSONObject jsonObj = doJsonRequest(url);
+            JSONArray routes = jsonObj.getJSONArray("routes");
+            JSONObject route = routes.getJSONObject(0);
+            JSONObject polyline = route.getJSONObject("overview_polyline");
+            String encodedPoints = polyline.getString("points");
+            line = PolyUtil.decode(encodedPoints);
+
+            return line;
+        } catch (IOException e) {
+            return line;
+        } catch (JSONException e) {
+            Log.e(LOG_TAG, "Cannot process JSON results", e);
+        }
+
+        return line;
+    }
+
+    public static AsyncTask<LatLng, Void, List<LatLng>> directionsForAsync(LatLng myPosition, LatLng friendPosition, LatLng friendDestination) {
+        return new AsyncDirectionRequest().execute(myPosition, friendPosition, friendDestination);
     }
 
     public static AsyncTask<String, Void, List<Place>> placesForAsync(String query) {

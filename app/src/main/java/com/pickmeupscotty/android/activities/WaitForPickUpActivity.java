@@ -13,22 +13,15 @@ import com.pickmeupscotty.android.amqp.Subscriber;
 import com.pickmeupscotty.android.messages.PickUpResponse;
 
 public class WaitForPickUpActivity extends Activity {
-    ProgressDialog progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wait_for_pick_up);
 
-        progress = new ProgressDialog(this, ProgressDialog.THEME_HOLO_LIGHT);
-        progress.setTitle("Waiting");
-        progress.setMessage("Waiting for someone to accept...");
-        progress.show();
-
         RabbitService.subscribe(PickUpResponse.class, new Subscriber<PickUpResponse>() {
             @Override
             public void on(PickUpResponse response) {
-                progress.hide();
                 Toast.makeText(WaitForPickUpActivity.this, "You have been accepted!", Toast.LENGTH_LONG).show();
             }
         });
