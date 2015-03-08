@@ -1,15 +1,14 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.pickmeupscotty.android.activities.ResponseActivity"
-    android:background="@drawable/tramperin">
+    tools:context="com.pickmeupscotty.android.activities.ResponseActivity">
 
     <ImageView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_centerInParent="true"
         android:scaleType="centerCrop"
-        android:src="@drawable/tramperin"
+        android:src="@drawable/tramperin_fotolia"
         android:id="@+id/background_image" />
 
     <android.support.v7.widget.CardView

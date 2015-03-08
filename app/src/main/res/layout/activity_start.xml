@@ -8,7 +8,7 @@
         android:layout_height="fill_parent"
         android:layout_centerInParent="true"
         android:scaleType="centerCrop"
-        android:src="@drawable/tramperin"
+        android:src="@drawable/tramperin_fotolia"
         android:id="@+id/background_image" />
 
     <fragment
