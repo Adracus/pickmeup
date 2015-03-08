@@ -12,7 +12,9 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.Request;
 import com.facebook.Response;
+import com.facebook.model.GraphUser;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -116,16 +118,14 @@ public class ResponseActivity extends LocationAware {
     }
 
     public void acceptPickUp(View view) {
-        FBWrapper.INSTANCE.getUserId(new FBWrapper.UserIdCallback() {
+        FBWrapper.INSTANCE.getMyUser(new Request.GraphUserCallback() {
             @Override
-            public void onCompleted(String fbid) {
-                Log.e("service2", fbid);
-                Log.e("service2", request.getFacebookId());
-                PickUpResponse response = new PickUpResponse(
-                        fbid,
-                        request.getFacebookName(),
+            public void onCompleted(GraphUser graphUser, Response response) {
+                PickUpResponse pickUpResponse = new PickUpResponse(
+                        graphUser.getId(),
+                        graphUser.getName(),
                         distance.getDurationText());
-                RabbitService.send(response, request.getFacebookId());
+                RabbitService.send(pickUpResponse, request.getFacebookId());
 
                 Intent intent = new Intent(ResponseActivity.this, DriverActivity.class);
                 startActivity(intent);

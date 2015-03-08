@@ -1,41 +1,34 @@
 package com.pickmeupscotty.android.activities;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.pickmeupscotty.android.R;
-import com.pickmeupscotty.android.amqp.RabbitService;
-import com.pickmeupscotty.android.amqp.Subscriber;
 import com.pickmeupscotty.android.messages.PickUpResponse;
 
-public class WaitForPickUpActivity extends Activity {
+public class RequestAcceptedActivity extends Activity {
+    private PickUpResponse response;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_wait_for_pick_up);
-
-        RabbitService.subscribe(PickUpResponse.class, new Subscriber<PickUpResponse>() {
-            @Override
-            public void on(PickUpResponse response) {
-                Toast.makeText(WaitForPickUpActivity.this, "You have been accepted!", Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(WaitForPickUpActivity.this, RequestAcceptedActivity.class);
-                intent.putExtra(PickUpResponse.PICK_UP_RESPONSE, response);
-                startActivity(intent);
-            }
-        });
+        setContentView(R.layout.activity_request_accepted);
+        response = getIntent().getParcelableExtra(PickUpResponse.PICK_UP_RESPONSE);
+        TextView etaMessageTextView = (TextView) findViewById(R.id.etaMessageTextView);
+        etaMessageTextView.setText(String.format(
+                getResources().getString(R.string.request_accepted_eta_message),
+                response.getDriverName(),
+                response.getEta()));
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_wait_for_pick_up, menu);
+        getMenuInflater().inflate(R.menu.menu_request_accepted, menu);
         return true;
     }
 

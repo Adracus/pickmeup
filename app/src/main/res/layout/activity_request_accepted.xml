@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:orientation="vertical">
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/map"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:name="com.google.android.gms.maps.MapFragment"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="0dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="0dp" />
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/map"
+        android:id="@+id/scrollView" >
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/brand_color">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="@string/title_activity_request_accepted"
+                    android:id="@+id/pickUpAcceptedTextView"
+                    android:layout_below="@+id/map"
+                    android:layout_alignParentStart="true"
+                    android:layout_margin="10dp"
+                    android:textSize="32dp"
+                    android:textColor="@color/white" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:id="@+id/etaMessageTextView"
+                android:layout_below="@+id/pickUpAcceptedTextView"
+                android:layout_alignStart="@+id/pickUpAcceptedTextView"
+                android:layout_alignParentBottom="true"
+                android:layout_alignEnd="@+id/driver_button"
+                android:textSize="24dp"
+                android:layout_margin="10dp" />
+        </LinearLayout>
+    </ScrollView>
+
+    <com.getbase.floatingactionbutton.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        fab:fab_icon="@drawable/mister_mustache"
+        fab:fab_colorNormal="@color/brand_color"
+        android:layout_alignParentRight="true"
+        android:layout_alignBottom="@+id/map"
+        android:layout_marginBottom="-32dp"
+        android:layout_marginRight="20dp" />
+
+</RelativeLayout>

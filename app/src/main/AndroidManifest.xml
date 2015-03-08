@@ -71,9 +71,9 @@
             android:name=".activities.ResponseActivity"
             android:exported="true"
             android:label="@string/title_activity_response"
-            android:noHistory="true"
             android:launchMode="singleTop"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar">
+            android:noHistory="true"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
 
         <service
@@ -94,6 +94,10 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activities.PickMeUpActivity" />
+        </activity>
+        <activity
+            android:name=".activities.RequestAcceptedActivity"
+            android:label="@string/title_activity_request_accepted" >
         </activity>
     </application>
 
