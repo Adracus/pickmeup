@@ -1,6 +1,7 @@
 package com.pickmeupscotty.android.services;
 
 import android.app.IntentService;
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -43,16 +44,17 @@ public class NotificationService extends IntentService {
 
                 PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-                NotificationCompat.Builder notification = new NotificationCompat.Builder(context)
+                NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context)
                         .setContentTitle("Pick Up Request")
                         .setContentText("by " + request.getFacebookName())
                         .setSmallIcon(R.drawable.mister_mustache);
-                notification = notification
-                        .setContentIntent(contentIntent);
+                notificationBuilder = notificationBuilder.setContentIntent(contentIntent);
+                Notification notification = notificationBuilder.build();
+                notification.flags = Notification.DEFAULT_LIGHTS | Notification.FLAG_AUTO_CANCEL;
 
                 NotificationManager mNotificationManager =
                         (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                mNotificationManager.notify(12, notification.build());
+                mNotificationManager.notify(12, notification);
             }
         });
 
