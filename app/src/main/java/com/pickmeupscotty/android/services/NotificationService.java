@@ -56,8 +56,6 @@ public class NotificationService extends IntentService {
                 NotificationManager mNotificationManager =
                         (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                 mNotificationManager.notify(12, notification.build());
-
-                Toast.makeText(getApplicationContext(), request.toString(), Toast.LENGTH_SHORT).show();
             }
         });
 

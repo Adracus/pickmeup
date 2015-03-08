@@ -37,6 +37,12 @@ public class StartActivity extends FragmentActivity {
             @Override
             public void onStateChanged() {
                 //Forward to MainActivity
+                FBWrapper.INSTANCE.getUserId(new FBWrapper.UserIdCallback() {
+                    @Override
+                    public void onCompleted(String fbid) {
+                        Log.i("FBID", fbid);
+                    }
+                });
                 Intent intent = new Intent(StartActivity.this, MainActivity.class);
                 startActivity(intent);
             }
