@@ -29,19 +29,18 @@ public class RequestAcceptedActivity extends Activity {
                 getResources().getString(R.string.request_accepted_eta_message),
                 response.getDriverName(),
                 response.getEta()));
-        List<LatLng> positions = response.getPositions();
         MapFragment mMapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.routeMap);
         GoogleMap mMap = mMapFragment.getMap();
         mMap.setMyLocationEnabled(true);
         mMap.clear();
         mMap.addMarker(new MarkerOptions()
-                .position(positions.get(0))
+                .position(new LatLng(response.getDestinationLatitude(), response.getDestinationLongitude()))
                 .draggable(true));
         mMap.addMarker(new MarkerOptions()
-                .position(positions.get(1))
+                .position(new LatLng(response.getDriverLatitude(), response.getDriverLongitude()))
                 .draggable(true));
         mMap.addMarker(new MarkerOptions()
-                .position(positions.get(2))
+                .position(new LatLng(response.getFriendLatitude(), response.getFriendLongitude()))
                 .draggable(true));
     }
 

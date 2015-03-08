@@ -2,27 +2,33 @@ package com.pickmeupscotty.android.messages;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
-import com.google.android.gms.maps.model.LatLng;
 import com.pickmeupscotty.android.amqp.Message;
-
-import java.util.List;
 
 public class PickUpResponse implements Message, Parcelable {
     public static final String PICK_UP_RESPONSE = "PICK_UP_RESPONSE";
     private String driverFacebookId;
     private String driverName;
     private String eta;
-    private List<LatLng> positions;
+    private double friendLatitude;
+    private double friendLongitude;
+    private double destinationLatitude;
+    private double destinationLongitude;
+    private double driverLatitude;
+    private double driverLongitude;
 
-    public PickUpResponse(String driverFacebookId, String driverName, String eta, List<LatLng> positions) {
+    public PickUpResponse() {}
+
+    public PickUpResponse(String driverFacebookId, String driverName, String eta, double friendLatitude, double friendLongitude, double destinationLatitude, double destinationLongitude, double driverLatitude, double driverLongitude) {
         this.driverFacebookId = driverFacebookId;
         this.driverName = driverName;
         this.eta = eta;
-        this.positions = positions;
+        this.friendLatitude = friendLatitude;
+        this.friendLongitude = friendLongitude;
+        this.destinationLatitude = destinationLatitude;
+        this.destinationLongitude = destinationLongitude;
+        this.driverLatitude = driverLatitude;
+        this.driverLongitude = driverLongitude;
     }
-
-    public PickUpResponse() {}
 
     public String getDriverFacebookId() {
         return driverFacebookId;
@@ -48,19 +54,64 @@ public class PickUpResponse implements Message, Parcelable {
         this.eta = eta;
     }
 
-    public List<LatLng> getPositions() {
-        return positions;
+    public double getFriendLatitude() {
+        return friendLatitude;
     }
 
-    public void setPositions(List<LatLng> route) {
-        this.positions = route;
+    public void setFriendLatitude(double friendLatitude) {
+        this.friendLatitude = friendLatitude;
+    }
+
+    public double getFriendLongitude() {
+        return friendLongitude;
+    }
+
+    public void setFriendLongitude(double friendLongitude) {
+        this.friendLongitude = friendLongitude;
+    }
+
+    public double getDestinationLatitude() {
+        return destinationLatitude;
+    }
+
+    public void setDestinationLatitude(double destinationLatitude) {
+        this.destinationLatitude = destinationLatitude;
+    }
+
+    public double getDestinationLongitude() {
+        return destinationLongitude;
+    }
+
+    public void setDestinationLongitude(double destinationLongitude) {
+        this.destinationLongitude = destinationLongitude;
+    }
+
+    public double getDriverLatitude() {
+        return driverLatitude;
+    }
+
+    public void setDriverLatitude(double driverLatitude) {
+        this.driverLatitude = driverLatitude;
+    }
+
+    public double getDriverLongitude() {
+        return driverLongitude;
+    }
+
+    public void setDriverLongitude(double driverLongitude) {
+        this.driverLongitude = driverLongitude;
     }
 
     protected PickUpResponse(Parcel in) {
         driverFacebookId = in.readString();
         driverName = in.readString();
         eta = in.readString();
-        positions = in.readArrayList(LatLng.class.getClassLoader());
+        friendLatitude = in.readDouble();
+        friendLongitude = in.readDouble();
+        destinationLatitude = in.readDouble();
+        destinationLongitude = in.readDouble();
+        driverLatitude = in.readDouble();
+        driverLongitude = in.readDouble();
     }
 
     @Override
@@ -73,7 +124,12 @@ public class PickUpResponse implements Message, Parcelable {
         dest.writeString(driverFacebookId);
         dest.writeString(driverName);
         dest.writeString(eta);
-        dest.writeList(positions);
+        dest.writeDouble(friendLatitude);
+        dest.writeDouble(friendLongitude);
+        dest.writeDouble(destinationLatitude);
+        dest.writeDouble(destinationLongitude);
+        dest.writeDouble(driverLatitude);
+        dest.writeDouble(driverLongitude);
     }
 
     @SuppressWarnings("unused")
