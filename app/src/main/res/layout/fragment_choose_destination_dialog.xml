@@ -10,7 +10,7 @@
         android:text="Enter your destination"
         android:id="@+id/textView4"
         android:layout_weight="1"
-        android:textSize="28dp" />
+        android:textSize="24dp" />
 
     <AutoCompleteTextView
         android:layout_width="match_parent"
