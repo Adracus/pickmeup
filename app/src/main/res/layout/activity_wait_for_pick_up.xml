@@ -1,13 +1,45 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:layout_height="match_parent"
     tools:context="com.pickmeupscotty.android.activities.WaitForPickUpActivity">
 
-    <TextView android:text="Waiting for pick up..." android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="40dp" />
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageView"
+            android:src="@drawable/hour_glass"
+            android:scaleType="centerInside"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="false"
+            android:alpha="0.4"
+            android:layout_alignParentStart="false"
+            android:padding="10dp"
+            android:layout_above="@+id/textView"
+            android:layout_weight="1"
+            android:layout_gravity="center" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/waiting_pickup_response"
+            android:id="@+id/textView"
+            android:textSize="40dp"
+            android:autoText="false"
+            android:gravity="center_horizontal"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:background="#aaffffff"
+            android:textColor="#555555"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="20dp"
+            android:paddingTop="20dp"
+            android:layout_weight="0" />
+    </LinearLayout>
 
 </RelativeLayout>
