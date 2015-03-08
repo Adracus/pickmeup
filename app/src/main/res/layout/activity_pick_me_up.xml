@@ -62,7 +62,7 @@
         android:id="@+id/driver_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        fab:fab_icon="@drawable/search_glass"
+        fab:fab_icon="@drawable/thumb"
         fab:fab_colorNormal="@color/brand_color"
         fab:fab_colorPressed="@color/brand_color_light"
         android:layout_alignParentRight="true"
