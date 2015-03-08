@@ -1,6 +1,5 @@
 package com.pickmeupscotty.android.maps;
 
-import android.location.Location;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -10,9 +9,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -26,6 +23,7 @@ public class GooglePlaces {
     private static final String PLACES_API_BASE = "https://maps.googleapis.com/maps/api/place";
     private static final String TYPE_AUTOCOMPLETE = "/autocomplete";
     private static final String TYPE_TEXTSEARCH = "/textsearch";
+    private static final String TYPE_DISTANCEMATRIX = "/distancematrix";
     private static final String OUT_JSON = "/json";
     private static final String browserKey = "AIzaSyDQC2EsFulKdRM01JsdD5o_oOo5xrm4BBQ";
 
@@ -82,8 +80,43 @@ public class GooglePlaces {
         return result;
     }
 
+    public static Distance durationBetween(double fromLatitude, double fromLongitude, double toLatitude, double toLongitude) {
+        Distance result = null;
+
+        try {
+            StringBuilder sb = new StringBuilder(PLACES_API_BASE + TYPE_DISTANCEMATRIX + OUT_JSON);
+            sb.append("?key=" + browserKey);
+            sb.append("&origins=" + fromLatitude + "," + fromLongitude);
+            sb.append("&destinations=" + toLatitude + "," + toLongitude);
+            URL url = new URL(sb.toString());
+
+            JSONObject jsonObj = doJsonRequest(url);
+            JSONObject elem = jsonObj.getJSONArray("rows").getJSONObject(0);
+            result = new Distance(elem);
+
+
+        } catch (IOException e) {
+            return result;
+        } catch (JSONException e) {
+            Log.e(LOG_TAG, "Cannot process JSON results", e);
+        }
+
+        return result;
+    }
+
     public static AsyncTask<String, Void, List<Place>> placesForAsync(String query) {
         return new AsyncPlacesRequest().execute(query);
+    }
+
+
+    public static AsyncTask<Double, Void, Distance> durationBetweenAsync(double fromLatitude, double fromLongitude, double toLatitude, double toLongitude) {
+        Double[] params = new Double[4];
+        params[0] = fromLatitude;
+        params[1] = fromLongitude;
+        params[2] = toLatitude;
+        params[3] = toLongitude;
+
+        return new AsyncDurationRequest().execute(params);
     }
 
 
@@ -153,6 +186,29 @@ public class GooglePlaces {
 
         public double getLongitude() {
             return longitude;
+        }
+    }
+
+    public static class Distance {
+        private int seconds;
+        private String durationText;
+        private int meters;
+        private String distanceText;
+
+        public Distance(int seconds, String durationText, int meters, String distanceText) {
+            this.seconds = seconds;
+            this.durationText = durationText;
+            this.meters = meters;
+            this.distanceText = distanceText;
+        }
+
+        public Distance(JSONObject json) throws JSONException {
+            JSONObject duration = json.getJSONObject("duration");
+            this.seconds = duration.getInt("value");
+            this.durationText = duration.getString("text");
+            JSONObject distance = json.getJSONObject("distance");
+            this.meters = distance.getInt("value");
+            this.distanceText = distance.getString("text");
         }
     }
 }
