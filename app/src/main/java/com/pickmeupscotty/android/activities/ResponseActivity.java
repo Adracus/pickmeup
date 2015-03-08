@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.Response;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -19,8 +20,10 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.pickmeupscotty.android.R;
 import com.pickmeupscotty.android.amqp.RabbitService;
+import com.pickmeupscotty.android.login.FBWrapper;
 import com.pickmeupscotty.android.maps.GooglePlaces;
 import com.pickmeupscotty.android.messages.PickUpRequest;
+import com.pickmeupscotty.android.messages.PickUpResponse;
 
 import java.util.concurrent.ExecutionException;
 
@@ -31,6 +34,7 @@ public class ResponseActivity extends Activity {
     private GoogleMap mMap;
     private boolean movedMap;
     private PickUpRequest request;
+    private GooglePlaces.Distance distance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +46,7 @@ public class ResponseActivity extends Activity {
         nameView.setText(request.getFacebookName());
 
         try {
-            GooglePlaces.Distance distance = GooglePlaces.durationBetweenAsync(
+            distance = GooglePlaces.durationBetweenAsync(
                     request.getCurrentLatitude(),
                     request.getCurrentLongitude(),
                     request.getDestinationLatitude(),
@@ -82,12 +86,19 @@ public class ResponseActivity extends Activity {
     }
 
     public void acceptPickUp(View view) {
-        RabbitService.send(request, request.getFacebookId());
+        FBWrapper.INSTANCE.getUserId(new FBWrapper.UserIdCallback() {
+            @Override
+            public void onCompleted(String fbid) {
+                PickUpResponse response = new PickUpResponse(
+                        fbid,
+                        request.getFacebookName(),
+                        distance.getDurationText());
+                RabbitService.send(response, request.getFacebookId());
 
-        Toast.makeText(this, "Thanks for the ride!", Toast.LENGTH_SHORT).show();
-
-        Intent intent = new Intent(this, DriverActivity.class);
-        startActivity(intent);
+                Intent intent = new Intent(ResponseActivity.this, DriverActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     public void denyPickUp(View view) {
