@@ -9,34 +9,45 @@
         android:layout_height="fill_parent"
         android:layout_centerInParent="true"
         android:scaleType="centerCrop"
-        android:src="@drawable/steering_wheel"
+        android:src="@drawable/cockpit"
         android:id="@+id/steering_wheel" />
 
-    <android.support.v7.widget.CardView
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/card_view"
-        android:layout_gravity="center"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        card_view:cardCornerRadius="4dp"
-        card_view:cardBackgroundColor="#aaffffff"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="10dp">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="bottom">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Waiting for friends to ask for pick up ..."
+            android:text="@string/waiting_pickup_request"
             android:id="@+id/textView"
             android:textSize="40dp"
             android:autoText="false"
             android:gravity="center_horizontal"
             android:layout_alignParentBottom="true"
             android:layout_alignParentStart="true"
-            android:textColor="#555555" />
-    </android.support.v7.widget.CardView>
+            android:background="#aaffffff"
+            android:textColor="#555555"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="20dp"
+            android:paddingTop="20dp" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/waiting_pickup_request_additional"
+            android:id="@+id/textView2"
+            android:gravity="center_horizontal"
+            android:layout_alignParentBottom="true"
+            android:background="#aaffffff"
+            android:textColor="#555555"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp" />
+    </LinearLayout>
 
 </RelativeLayout>
